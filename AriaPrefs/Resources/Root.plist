@@ -52,7 +52,7 @@
 				<key>cellClass</key>
 				<string>GcImagePickerCell</string>
 				<key>label</key>
-				<string>Hot Good Looking Image</string>
+				<string>Hot Good Light Looking Image</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<!--key>PostNotification</key>
@@ -65,6 +65,26 @@
 				<false />
 				<key>videoQuality</key>
 				<integer>1</integer>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSSliderCell</string>
+				<key>default</key>
+				<real>1</real>
+				<key>defaults</key>
+				<string>me.luki.ariaprefs</string>
+				<key>key</key>
+				<string>alpha</string>
+				<key>min</key>
+				<real>0</real>
+				<key>max</key>
+				<real>1</real>
+				<key>showValue</key>
+				<true/>
 			</dict>
 		</array>
 		<key>title</key>
