@@ -1,0 +1,9 @@
+Package: me.luki.aria
+Name: Aria
+Version: 0.9.0
+Architecture: iphoneos-arm
+Description: Choose a BG image for your CC on the fly
+Maintainer: Luki
+Author: Luki
+Section: Tweaks
+Depends: mobilesubstrate, preferenceloader, com.mrgcgamer.libgcuniversal
