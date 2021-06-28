@@ -32,7 +32,8 @@
 
 @interface CCUIModularControlCenterOverlayViewController : UIViewController
 @property (nonatomic, retain) MTMaterialView *overlayBackgroundView;
-@property (nonatomic, strong) UIImageView *hotGoodLookingImage;
+@property (nonatomic, strong) UIImageView *hotGoodLookingImageView;
+@property (nonatomic, strong) _UIBackdropView *blurView;
 - (void)unleashThatHotGoodLookingImage;
 @end
 
@@ -60,77 +61,77 @@ static void loadWithoutAGoddamnRespring() {
 }
 
 
-
+%hook UIScreen
+-(void)traitCollectionDidChange:(id)previous{
+	%orig;
+	
+	[NSNotificationCenter.defaultCenter postNotificationName:@"traitCollectionDidChange" object:NULL];
+}
+%end
 
 %hook CCUIModularControlCenterOverlayViewController
 
 
-%property (nonatomic, strong) UIImageView *hotGoodLookingImage;
+%property (nonatomic, strong) UIImageView *hotGoodLookingImageView;
+%property (nonatomic, strong) _UIBackdropView *blurView;
 
+-(void)viewDidLoad{
+	%orig;
+	
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatHotGoodLookingImage) name:@"traitCollectionDidChange" object:NULL];
+}
 
 - (void)viewWillAppear:(BOOL)animated {
 
 
 	%orig(animated);
+	
+	[self unleashThatHotGoodLookingImage];
 
+}
+
+%new
+- (void)unleashThatHotGoodLookingImage{
 	loadWithoutAGoddamnRespring();
-
-	[[self.view viewWithTag:120] removeFromSuperview];
-	[[self.view viewWithTag:1337] removeFromSuperview];
-
-
+	
 	if(giveMeTheImage) {
-
+		if(!self.hotGoodLookingImageView){
+			self.hotGoodLookingImageView = [[UIImageView alloc] initWithFrame:self.overlayBackgroundView.bounds];
+			self.hotGoodLookingImageView.contentMode = UIViewContentModeScaleAspectFill;
+			self.hotGoodLookingImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+			[self.overlayBackgroundView insertSubview:self.hotGoodLookingImageView atIndex:0];
+		}
 
 		self.overlayBackgroundView.shouldCrossfade = YES;
 		
 
-		self.hotGoodLookingImage = [[UIImageView alloc] initWithFrame:self.overlayBackgroundView.bounds];
-		self.hotGoodLookingImage.tag = 120;
-
-		if (self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) self.hotGoodLookingImage.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"];
-		else self.hotGoodLookingImage.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];
 		
-		self.hotGoodLookingImage.contentMode = UIViewContentModeScaleAspectFill;
-		self.hotGoodLookingImage.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		[self.overlayBackgroundView insertSubview:self.hotGoodLookingImage atIndex:0];
 
+		if (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) self.hotGoodLookingImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"];
+		else self.hotGoodLookingImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];
+		
+		
+		if(!self.blurView){
+			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
-		_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+			self.blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
+			self.blurView.blurRadiusSetOnce = NO;
+			self.blurView._blurRadius = 80.0;
+			self.blurView._blurQuality = @"high";
+			self.blurView.alpha = alpha;
+			[self.overlayBackgroundView insertSubview:self.blurView atIndex:1];
+		}
 
-		_UIBackdropView *blurView = [[_UIBackdropView alloc] initWithFrame:CGRectZero
-		autosizesToFitSuperview:YES settings:settings];
-		blurView.blurRadiusSetOnce = NO;
-		blurView._blurRadius = 80.0;
-		blurView._blurQuality = @"high";
-		blurView.tag = 1337;
-		blurView.alpha = alpha;
-		[self.overlayBackgroundView insertSubview:blurView atIndex:1];
+		
 
 	
+	} else{
+		[self.hotGoodLookingImageView removeFromSuperview];
+		self.hotGoodLookingImageView = NULL;
+		
+		[self.blurView removeFromSuperview];
+		self.blurView = NULL;
 	}
-
-}
-
-
-- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
-
- 
-	%orig(previousTraitCollection);
-
-
-	if(previousTraitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
-
-
-		self.hotGoodLookingImage.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];
-
-
-	else
-
-
-		self.hotGoodLookingImage.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"];
-
-
 }
 
 
