@@ -161,7 +161,7 @@ static void loadWithoutAGoddamnRespring() {
 
 
 - (void)traitCollectionDidChange:(id)previous { // post a notification to force dark/light mode in the CC
-												// because otherwise for some goddamn reason the CC forces light mode
+						// because otherwise for some goddamn reason the CC forces light mode
 
 	%orig;
 	
