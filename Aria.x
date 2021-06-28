@@ -99,7 +99,6 @@ static void loadWithoutAGoddamnRespring() {
 	[[self.blurView viewWithTag:120] removeFromSuperview];
 
 
-	
 	if(giveMeTheImage) {
 
 
