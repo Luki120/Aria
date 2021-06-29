@@ -36,6 +36,9 @@
 - (void)unleashThatHotGoodLookingImage;
 @end
 
+@interface CCUIOverlayTransitionState : NSObject
+@property(nonatomic, readonly, assign) CGFloat clampedPresentationProgress;
+@end
 
 static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
 
@@ -52,11 +55,7 @@ static void loadWithoutAGoddamnRespring() {
 	
 	giveMeTheImage = prefs[@"giveMeTheImage"] ? [prefs[@"giveMeTheImage"] boolValue] : NO;
 	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
-
-
 }
-
-
 
 
 %hook CCUIModularControlCenterOverlayViewController
@@ -87,6 +86,12 @@ static void loadWithoutAGoddamnRespring() {
 
 }
 
+-(void)_updatePresentationForTransitionState:(CCUIOverlayTransitionState*)state withCompletionHander:(id)handler{
+	%orig;
+	
+	self.hotGoodLookingImageView.alpha = state.clampedPresentationProgress;
+	self.blurView.alpha = state.clampedPresentationProgress;
+}
 
 %new
 
@@ -107,6 +112,7 @@ static void loadWithoutAGoddamnRespring() {
 
 			self.hotGoodLookingImageView = [[UIImageView alloc] initWithFrame:self.overlayBackgroundView.bounds];
 			self.hotGoodLookingImageView.contentMode = UIViewContentModeScaleAspectFill;
+			self.hotGoodLookingImageView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
 			self.hotGoodLookingImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self.overlayBackgroundView insertSubview:self.hotGoodLookingImageView atIndex:0];
 
@@ -149,7 +155,6 @@ static void loadWithoutAGoddamnRespring() {
 	
 	}
 }
-
 
 %end
 
