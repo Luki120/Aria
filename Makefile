@@ -7,7 +7,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Aria
 
-Aria_FILES = Aria.x
+Aria_FILES = Aria.xm
 Aria_CFLAGS = -fobjc-arc
 Aria_LIBRARIES = gcuniversal
 
