@@ -36,16 +36,13 @@
 - (void)unleashThatHotGoodLookingImage;
 @end
 
-
 @interface CCUIOverlayTransitionState : NSObject
-@property (nonatomic, readonly, assign) CGFloat clampedPresentationProgress;
+@property(nonatomic, readonly, assign) CGFloat clampedPresentationProgress;
 @end
-
 
 static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
 
 static BOOL giveMeTheImage;
-static BOOL shouldTransition;
 
 float alpha = 1.0f;
 
@@ -57,13 +54,8 @@ static void loadWithoutAGoddamnRespring() {
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
 	
 	giveMeTheImage = prefs[@"giveMeTheImage"] ? [prefs[@"giveMeTheImage"] boolValue] : NO;
-	shouldTransition = prefs[@"shouldTransition"] ? [prefs[@"shouldTransition"] boolValue] : NO;
 	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
-
-
 }
-
-
 
 
 %hook CCUIModularControlCenterOverlayViewController
@@ -94,29 +86,12 @@ static void loadWithoutAGoddamnRespring() {
 
 }
 
-
-- (void)_updatePresentationForTransitionState:(CCUIOverlayTransitionState*)state withCompletionHander:(id)handler {
-
-
+-(void)_updatePresentationForTransitionState:(CCUIOverlayTransitionState*)state withCompletionHander:(id)handler{
 	%orig;
-
-	loadWithoutAGoddamnRespring();
 	
-
-	if(shouldTransition) { // add an optional transition to fade in the image for a more stockish behavior
-
-		
-		self.hotGoodLookingImageView.alpha = state.clampedPresentationProgress;
-		self.blurView.alpha = state.clampedPresentationProgress * alpha;
-
-
-	}
-
-
-	else self.hotGoodLookingImageView.alpha = 1;
-
+	self.hotGoodLookingImageView.alpha = state.clampedPresentationProgress;
+	self.blurView.alpha = state.clampedPresentationProgress;
 }
-
 
 %new
 
@@ -137,7 +112,7 @@ static void loadWithoutAGoddamnRespring() {
 
 			self.hotGoodLookingImageView = [[UIImageView alloc] initWithFrame:self.overlayBackgroundView.bounds];
 			self.hotGoodLookingImageView.contentMode = UIViewContentModeScaleAspectFill;
-			if(shouldTransition) self.hotGoodLookingImageView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
+			self.hotGoodLookingImageView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
 			self.hotGoodLookingImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 			[self.overlayBackgroundView insertSubview:self.hotGoodLookingImageView atIndex:0];
 
@@ -152,7 +127,10 @@ static void loadWithoutAGoddamnRespring() {
 
 		[UIView transitionWithView:self.hotGoodLookingImageView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
-			self.hotGoodLookingImageView.image = (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) ? [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"] : [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];			
+
+			if (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) self.hotGoodLookingImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"];
+			else self.hotGoodLookingImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];
+		
 		
 		} completion:nil];
 
@@ -177,7 +155,6 @@ static void loadWithoutAGoddamnRespring() {
 	
 	}
 }
-
 
 %end
 
