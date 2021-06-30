@@ -24,6 +24,18 @@
 			</dict>
 			<dict>
 				<key>cell</key>
+				<string>PSSwitchCell</string>
+				<key>default</key>
+				<false/>
+				<key>defaults</key>
+				<string>me.luki.ariaprefs</string>
+				<key>key</key>
+				<string>shouldTransition</string>
+				<key>label</key>
+				<string>Enable Transition</string>
+			</dict>
+			<dict>
+				<key>cell</key>
 				<string>PSGroupCell</string>
 			</dict>
 			<dict>
