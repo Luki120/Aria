@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 #import "GcImagePickerUtils.h"
+#import "GcColorPickerUtils.h"
 
 
 
@@ -33,7 +34,10 @@
 @property (nonatomic, retain) MTMaterialView *overlayBackgroundView;
 @property (nonatomic, strong) UIImageView *hotGoodLookingImageView;
 @property (nonatomic, strong) _UIBackdropView *blurView;
+@property (nonatomic, strong) UIView *hotGradientView;
+@property (nonatomic, strong) CAGradientLayer *gradient;
 - (void)unleashThatHotGoodLookingImage;
+- (void)setAHotGoodLookingGradient;
 @end
 
 
@@ -46,8 +50,14 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
 
 static BOOL giveMeTheImage;
 static BOOL shouldTransition;
+static BOOL giveMeThoseGradients;
+static BOOL neatGradientAnimation;
+static BOOL shouldTransitionForGradient;
 
 float alpha = 1.0f;
+
+//CAGradientLayer *gradient;
+//UIView *hotGradientView;
 
 
 static void loadWithoutAGoddamnRespring() {
@@ -58,6 +68,9 @@ static void loadWithoutAGoddamnRespring() {
 	
 	giveMeTheImage = prefs[@"giveMeTheImage"] ? [prefs[@"giveMeTheImage"] boolValue] : NO;
 	shouldTransition = prefs[@"shouldTransition"] ? [prefs[@"shouldTransition"] boolValue] : NO;
+	giveMeThoseGradients = prefs[@"giveMeThoseGradients"] ? [prefs[@"giveMeThoseGradients"] boolValue] : NO;
+	neatGradientAnimation = prefs[@"neatGradientAnimation"] ?  [prefs[@"neatGradientAnimation"] boolValue] : NO;
+	shouldTransitionForGradient = prefs[@"shouldTransitionForGradient"] ? [prefs[@"shouldTransitionForGradient"] boolValue] : NO;	
 	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
 
 
@@ -71,6 +84,8 @@ static void loadWithoutAGoddamnRespring() {
 
 %property (nonatomic, strong) UIImageView *hotGoodLookingImageView;
 %property (nonatomic, strong) _UIBackdropView *blurView;
+%property (nonatomic, strong) UIView *hotGradientView;
+%property (nonatomic, strong) CAGradientLayer *gradient;
 
 
 - (void)viewDidLoad { // create a notification observer to force dark/light mode in the CC
@@ -79,7 +94,6 @@ static void loadWithoutAGoddamnRespring() {
 	%orig;
 	
 	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashThatHotGoodLookingImage) name:@"traitCollectionDidChange" object:nil];
-
 
 }
 
@@ -90,6 +104,7 @@ static void loadWithoutAGoddamnRespring() {
 	%orig(animated);
 	
 	[self unleashThatHotGoodLookingImage];
+	[self setAHotGoodLookingGradient];
 
 
 }
@@ -114,6 +129,10 @@ static void loadWithoutAGoddamnRespring() {
 
 
 	else self.hotGoodLookingImageView.alpha = 1;
+
+
+	if(shouldTransitionForGradient) self.hotGradientView.alpha = state.clampedPresentationProgress;
+	else self.hotGradientView.alpha = 1;
 
 }
 
@@ -174,8 +193,66 @@ static void loadWithoutAGoddamnRespring() {
 		[self.hotGoodLookingImageView removeFromSuperview];
 		self.hotGoodLookingImageView = nil;
 
-	
+
 	}
+
+}
+
+
+%new
+
+
+- (void)setAHotGoodLookingGradient {
+
+
+	loadWithoutAGoddamnRespring();
+
+	[[self.view viewWithTag:2811] removeFromSuperview];
+
+
+	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"gradientFirstColor" fallback:@"ffffff"];
+	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"gradientSecondColor" fallback:@"ffffff"];
+
+
+	if(giveMeThoseGradients) {
+
+
+		self.hotGradientView = [[UIView alloc] initWithFrame:self.overlayBackgroundView.bounds];
+		self.hotGradientView.tag = 2811;
+		self.hotGradientView.clipsToBounds = YES;
+		if(shouldTransitionForGradient) self.hotGradientView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
+		self.gradient = [CAGradientLayer layer];
+		self.gradient.frame = self.hotGradientView.frame;
+		self.gradient.startPoint = CGPointMake(1,1); // Lower right to upper left
+		self.gradient.endPoint = CGPointMake(0,0);
+		self.gradient.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+		self.gradient.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.00], [NSNumber numberWithFloat:0.50] , nil];
+		[self.hotGradientView.layer insertSublayer:self.gradient atIndex:0];
+		[self.overlayBackgroundView insertSubview:self.hotGradientView atIndex:0];
+
+		self.overlayBackgroundView.shouldCrossfade = YES;
+
+
+	}
+
+
+		if(neatGradientAnimation) {
+
+			
+			CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"colors"];
+			animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+			animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
+			animation.duration = 4.5;
+			animation.removedOnCompletion = NO;
+			animation.autoreverses = YES;
+			animation.repeatCount = HUGE_VALF; // Loop the animation forever
+			animation.fillMode = kCAFillModeBoth;
+			animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+			[self.gradient addAnimation:animation forKey:@"animateGradient"];
+
+
+		}
+
 }
 
 
