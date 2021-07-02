@@ -54,6 +54,8 @@ static BOOL giveMeThoseGradients;
 static BOOL neatGradientAnimation;
 static BOOL shouldTransitionForGradient;
 
+static int gradientDirection;
+
 float alpha = 1.0f;
 
 //CAGradientLayer *gradient;
@@ -70,6 +72,7 @@ static void loadWithoutAGoddamnRespring() {
 	shouldTransition = prefs[@"shouldTransition"] ? [prefs[@"shouldTransition"] boolValue] : NO;
 	giveMeThoseGradients = prefs[@"giveMeThoseGradients"] ? [prefs[@"giveMeThoseGradients"] boolValue] : NO;
 	neatGradientAnimation = prefs[@"neatGradientAnimation"] ?  [prefs[@"neatGradientAnimation"] boolValue] : NO;
+	gradientDirection = prefs[@"gradientDirection"] ? [prefs[@"gradientDirection"] integerValue] : 0;
 	shouldTransitionForGradient = prefs[@"shouldTransitionForGradient"] ? [prefs[@"shouldTransitionForGradient"] boolValue] : NO;	
 	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
 
@@ -232,7 +235,7 @@ static void loadWithoutAGoddamnRespring() {
 		if(shouldTransitionForGradient) self.hotGradientView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
 		self.gradient = [CAGradientLayer layer];
 		self.gradient.frame = self.hotGradientView.frame;
-		self.gradient.startPoint = CGPointMake(0.5,1); // Lower right to upper left
+		self.gradient.startPoint = CGPointMake(0.5,1); // Bottom to top, default
 		self.gradient.endPoint = CGPointMake(0.5,0);
 		self.gradient.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 //		self.gradient.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.00], [NSNumber numberWithFloat:0.50] , nil];
@@ -259,6 +262,68 @@ static void loadWithoutAGoddamnRespring() {
 		animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
 		[self.gradient addAnimation:animation forKey:@"animateGradient"];
 
+
+	}
+
+
+
+	switch(gradientDirection) {
+
+
+		case 0: // Bottom to Top
+
+			self.gradient.startPoint = CGPointMake(0.5,1);
+			self.gradient.endPoint = CGPointMake(0.5,0);
+			break;
+
+
+		case 1: // Top to Bottom
+
+			self.gradient.startPoint = CGPointMake(0.5,0);
+			self.gradient.endPoint = CGPointMake(0.5,1);
+			break;
+
+
+		case 2: // Left to Right
+
+			self.gradient.startPoint = CGPointMake(0,0.5);
+			self.gradient.endPoint = CGPointMake(1,0.5);
+			break;
+
+
+		case 3: // Right to Left
+
+			self.gradient.startPoint = CGPointMake(1,0.5);
+			self.gradient.endPoint = CGPointMake(0,0.5);
+			break;
+
+
+		case 4: // Upper Left lower right
+
+			self.gradient.startPoint = CGPointMake(0,0);
+			self.gradient.endPoint = CGPointMake(1,1);
+			break;
+
+
+		case 5: // Lower left upper right
+
+			self.gradient.startPoint = CGPointMake(0,1);
+			self.gradient.endPoint = CGPointMake(1,0);
+			break;
+
+
+		case 6: // Upper right lower left
+
+			self.gradient.startPoint = CGPointMake(1,0);
+			self.gradient.endPoint = CGPointMake(0,1);
+			break;
+
+
+		case 7: // Lower right upper left
+
+			self.gradient.startPoint = CGPointMake(1,1);
+			self.gradient.endPoint = CGPointMake(0,0);
+			break;
 
 	}
 
