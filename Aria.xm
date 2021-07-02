@@ -245,22 +245,22 @@ static void loadWithoutAGoddamnRespring() {
 	}
 
 
-		if(neatGradientAnimation) {
+	if(neatGradientAnimation) {
 
 			
-			CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"colors"];
-			animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-			animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
-			animation.duration = 4.5;
-			animation.removedOnCompletion = NO;
-			animation.autoreverses = YES;
-			animation.repeatCount = HUGE_VALF; // Loop the animation forever
-			animation.fillMode = kCAFillModeBoth;
-			animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-			[self.gradient addAnimation:animation forKey:@"animateGradient"];
+		CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"colors"];
+		animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+		animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
+		animation.duration = 4.5;
+		animation.removedOnCompletion = NO;
+		animation.autoreverses = YES;
+		animation.repeatCount = HUGE_VALF; // Loop the animation forever
+		animation.fillMode = kCAFillModeBoth;
+		animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+		[self.gradient addAnimation:animation forKey:@"animateGradient"];
 
 
-		}
+	}
 
 }
 
