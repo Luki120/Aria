@@ -131,7 +131,16 @@ static void loadWithoutAGoddamnRespring() {
 	else self.hotGoodLookingImageView.alpha = 1;
 
 
-	if(shouldTransitionForGradient) self.hotGradientView.alpha = state.clampedPresentationProgress;
+	if(shouldTransitionForGradient) {
+
+
+		self.hotGradientView.alpha = state.clampedPresentationProgress;
+		self.blurView.alpha = state.clampedPresentationProgress * alpha;
+
+
+	}
+
+
 	else self.hotGradientView.alpha = 1;
 
 }
@@ -223,10 +232,10 @@ static void loadWithoutAGoddamnRespring() {
 		if(shouldTransitionForGradient) self.hotGradientView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
 		self.gradient = [CAGradientLayer layer];
 		self.gradient.frame = self.hotGradientView.frame;
-		self.gradient.startPoint = CGPointMake(1,1); // Lower right to upper left
-		self.gradient.endPoint = CGPointMake(0,0);
+		self.gradient.startPoint = CGPointMake(0.5,1); // Lower right to upper left
+		self.gradient.endPoint = CGPointMake(0.5,0);
 		self.gradient.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-		self.gradient.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.00], [NSNumber numberWithFloat:0.50] , nil];
+//		self.gradient.locations = [NSArray arrayWithObjects:[NSNumber numberWithFloat:0.00], [NSNumber numberWithFloat:0.50] , nil];
 		[self.hotGradientView.layer insertSublayer:self.gradient atIndex:0];
 		[self.overlayBackgroundView insertSubview:self.hotGradientView atIndex:0];
 
