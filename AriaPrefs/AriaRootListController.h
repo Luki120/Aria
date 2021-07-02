@@ -5,7 +5,19 @@
 
 
 
+@interface AriaTableCell : PSTableCell
+@end
+
+
 @interface AriaRootListController : PSListController
+@end
+
+
+@interface AriaLinksRootListController : PSListController
+@end
+
+
+@interface AriaContributorsRootListController : PSListController
 @end
 
 
