@@ -14,9 +14,9 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
 
 - (NSArray *)specifiers {
 
-	if (!_specifiers) {
+    if (!_specifiers) {
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
+        _specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
         NSArray *chosenIDs = @[@"GroupCell1", @"EnableTransitionSwitch", @"GroupCell2", @"DarkImage", @"LightImage", @"GroupCell3", @"BlurSlider", @"GroupCell5", @"GTransitionSwitch", @"GroupCell6", @"AnimateGradientSwitch", @"GroupCell7", @"GFirstColor", @"GSecondColor", @"GroupCell8", @"GradientDirections"];
         self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
         for(PSSpecifier *specifier in _specifiers) {
@@ -26,9 +26,9 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
       
         }
 
-	}
+    }
 
-	return _specifiers;
+    return _specifiers;
 
 }
 
