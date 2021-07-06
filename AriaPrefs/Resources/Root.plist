@@ -15,12 +15,16 @@
 				<string>giveMeTheImage</string>
 				<key>label</key>
 				<string>Enable</string>
+				<key>PostNotification</key>
+				<string>me.luki.ariaprefs/ReloadPrefs</string>
+				<key>id</key>
+				<string>ImageSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
-				<key>footerText</key>
-				<string>This option makes the image fade in every time you swipe for a more stockish behavior, rather than just poping in. Swipe up very slowly to notice the difference between on/off.</string>
+				<key>id</key>
+				<string>GroupCell1</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -33,10 +37,14 @@
 				<string>shouldTransition</string>
 				<key>label</key>
 				<string>Enable Transition</string>
+				<key>id</key>
+				<string>EnableTransitionSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell2</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -44,9 +52,11 @@
 				<key>cellClass</key>
 				<string>GcImagePickerCell</string>
 				<key>label</key>
-				<string>Hot Good Looking Image</string>
+				<string>Neat Dark Image</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
+				<key>id</key>
+				<string>DarkImage</string>
 				<key>key</key>
 				<string>hotGoodLookingImage</string>
 				<key>usesPhotos</key>
@@ -62,9 +72,11 @@
 				<key>cellClass</key>
 				<string>GcImagePickerCell</string>
 				<key>label</key>
-				<string>Hot Good Light Looking Image</string>
+				<string>Fancy Light Image</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
+				<key>id</key>
+				<string>LightImage</string>
 				<key>key</key>
 				<string>hotGoodLightLookingImage</string>
 				<key>usesPhotos</key>
@@ -77,6 +89,8 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell3</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -93,10 +107,14 @@
 				<real>1</real>
 				<key>showValue</key>
 				<true/>
+				<key>id</key>
+				<string>BlurSlider</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell4</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -109,12 +127,14 @@
 				<string>giveMeThoseGradients</string>
 				<key>label</key>
 				<string>Gradients</string>
+				<key>id</key>
+				<string>GradientSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
-				<key>footerText</key>
-				<string>This option makes the gradient fade in every time you swipe for a more stockish behavior, rather than just poping in. Swipe up very slowly to notice the difference between on/off.</string>
+				<key>id</key>
+				<string>GroupCell5</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -127,12 +147,14 @@
 				<string>shouldTransitionForGradient</string>
 				<key>label</key>
 				<string>Enable Transition</string>
+				<key>id</key>
+				<string>GTransitionSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
-				<key>footerText</key>
-				<string>MAY OR MAY NOT DRAIN BATTERY</string>
+				<key>id</key>
+				<string>GroupCell6</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -145,10 +167,14 @@
 				<string>neatGradientAnimation</string>
 				<key>label</key>
 				<string>Animate Gradient</string>
+				<key>id</key>
+				<string>AnimateGradientSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell7</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -159,6 +185,8 @@
 				<string>First Color</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
+				<key>id</key>
+				<string>GFirstColor</string>
 				<key>key</key>
 				<string>gradientFirstColor</string>
 				<key>supportsAlpha</key>
@@ -175,6 +203,8 @@
 				<string>Second Color</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
+				<key>id</key>
+				<string>GSecondColor</string>
 				<key>key</key>
 				<string>gradientSecondColor</string>
 				<key>supportsAlpha</key>
@@ -185,6 +215,8 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>id</key>
+				<string>GroupCell8</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -193,6 +225,8 @@
 				<string>PSListItemsController</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
+				<key>id</key>
+				<string>GradientDirections</string>
 				<key>default</key>
 				<integer>0</integer>
 				<key>key</key>
