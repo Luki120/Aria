@@ -17,7 +17,7 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
     if (!_specifiers) {
 
         _specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
-        NSArray *chosenIDs = @[@"GroupCell1", @"DarkImage", @"LightImage", @"GroupCell3", @"BlurSlider", @"GroupCell5", @"AnimateGradientSwitch", @"GroupCell7", @"GFirstColor", @"GSecondColor", @"GroupCell8", @"GradientDirections"];
+        NSArray *chosenIDs = @[@"GroupCell1", @"EnableTransitionSwitch", @"GroupCell2", @"DarkImage", @"LightImage", @"GroupCell3", @"BlurSlider", @"GroupCell5", @"GTransitionSwitch", @"GroupCell6", @"AnimateGradientSwitch", @"GroupCell7", @"GFirstColor", @"GSecondColor", @"GroupCell8", @"GradientDirections"];
         self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
         for(PSSpecifier *specifier in _specifiers) {
             if([chosenIDs containsObject:[specifier propertyForKey:@"id"]]) {
@@ -41,6 +41,8 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
     if (![[self readPreferenceValue:[self specifierForID:@"ImageSwitch"]] boolValue]) {
 
         [self removeSpecifier:self.savedSpecifiers[@"GroupCell1"] animated:NO];
+        [self removeSpecifier:self.savedSpecifiers[@"EnableTransitionSwitch"] animated:NO];
+        [self removeSpecifier:self.savedSpecifiers[@"GroupCell2"] animated:NO];
         [self removeSpecifier:self.savedSpecifiers[@"DarkImage"] animated:NO];
         [self removeSpecifier:self.savedSpecifiers[@"LightImage"] animated:NO];
         [self removeSpecifier:self.savedSpecifiers[@"GroupCell3"] animated:NO];
@@ -52,7 +54,9 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
     else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell1"]]) {
 
         [self insertSpecifier:self.savedSpecifiers[@"GroupCell1"] afterSpecifierID:@"ImageSwitch" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"DarkImage"] afterSpecifierID:@"GroupCell1" animated:NO];
+        [self insertSpecifier:self.savedSpecifiers[@"EnableTransitionSwitch"] afterSpecifierID:@"GroupCell1" animated:NO];
+        [self insertSpecifier:self.savedSpecifiers[@"GroupCell2"] afterSpecifierID:@"EnableTransitionSwitch" animated:NO];
+        [self insertSpecifier:self.savedSpecifiers[@"DarkImage"] afterSpecifierID:@"GroupCell2" animated:NO];
         [self insertSpecifier:self.savedSpecifiers[@"LightImage"] afterSpecifierID:@"DarkImage" animated:NO];
         [self insertSpecifier:self.savedSpecifiers[@"GroupCell3"] afterSpecifierID:@"LightImage" animated:NO];
         [self insertSpecifier:self.savedSpecifiers[@"BlurSlider"] afterSpecifierID:@"GroupCell3" animated:NO];
@@ -63,6 +67,8 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
     if (![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue]) {
 
         [self removeSpecifier:self.savedSpecifiers[@"GroupCell5"] animated:NO];
+        [self removeSpecifier:self.savedSpecifiers[@"GTransitionSwitch"] animated:NO];
+        [self removeSpecifier:self.savedSpecifiers[@"GroupCell6"] animated:NO];
         [self removeSpecifier:self.savedSpecifiers[@"AnimateGradientSwitch"] animated:NO];
         [self removeSpecifier:self.savedSpecifiers[@"GroupCell7"] animated:NO];
         [self removeSpecifier:self.savedSpecifiers[@"GFirstColor"] animated:NO];
@@ -76,7 +82,9 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
     else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell5"]]) {
 
         [self insertSpecifier:self.savedSpecifiers[@"GroupCell5"] afterSpecifierID:@"GradientSwitch" animated:NO];
-        [self insertSpecifier:self.savedSpecifiers[@"AnimateGradientSwitch"] afterSpecifierID:@"GroupCell5" animated:NO];
+        [self insertSpecifier:self.savedSpecifiers[@"GTransitionSwitch"] afterSpecifierID:@"GroupCell5" animated:NO];
+        [self insertSpecifier:self.savedSpecifiers[@"GroupCell6"] afterSpecifierID:@"GTransitionSwitch" animated:NO];
+        [self insertSpecifier:self.savedSpecifiers[@"AnimateGradientSwitch"] afterSpecifierID:@"GroupCell6" animated:NO];
         [self insertSpecifier:self.savedSpecifiers[@"GroupCell7"] afterSpecifierID:@"AnimateGradientSwitch" animated:NO];
         [self insertSpecifier:self.savedSpecifiers[@"GFirstColor"] afterSpecifierID:@"GroupCell7" animated:NO];
         [self insertSpecifier:self.savedSpecifiers[@"GSecondColor"] afterSpecifierID:@"GFirstColor" animated:NO];
@@ -127,6 +135,8 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
 
 
             [self removeSpecifier:self.savedSpecifiers[@"GroupCell1"] animated:YES];
+            [self removeSpecifier:self.savedSpecifiers[@"EnableTransitionSwitch"] animated:YES];
+            [self removeSpecifier:self.savedSpecifiers[@"GroupCell2"] animated:YES];
             [self removeSpecifier:self.savedSpecifiers[@"DarkImage"] animated:YES];
             [self removeSpecifier:self.savedSpecifiers[@"LightImage"] animated:YES];
             [self removeSpecifier:self.savedSpecifiers[@"GroupCell3"] animated:YES];
@@ -140,7 +150,9 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
 
 
             [self insertSpecifier:self.savedSpecifiers[@"GroupCell1"] afterSpecifierID:@"ImageSwitch" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"DarkImage"] afterSpecifierID:@"GroupCell1" animated:YES];
+            [self insertSpecifier:self.savedSpecifiers[@"EnableTransitionSwitch"] afterSpecifierID:@"GroupCell1" animated:YES];
+            [self insertSpecifier:self.savedSpecifiers[@"GroupCell2"] afterSpecifierID:@"EnableTransitionSwitch" animated:YES];
+            [self insertSpecifier:self.savedSpecifiers[@"DarkImage"] afterSpecifierID:@"GroupCell2" animated:YES];
             [self insertSpecifier:self.savedSpecifiers[@"LightImage"] afterSpecifierID:@"DarkImage" animated:YES];
             [self insertSpecifier:self.savedSpecifiers[@"GroupCell3"] afterSpecifierID:@"LightImage" animated:YES];
             [self insertSpecifier:self.savedSpecifiers[@"BlurSlider"] afterSpecifierID:@"GroupCell3" animated:YES];
@@ -157,6 +169,8 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
         if (![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue]) {
 
             [self removeSpecifier:self.savedSpecifiers[@"GroupCell5"] animated:YES];
+            [self removeSpecifier:self.savedSpecifiers[@"GTransitionSwitch"] animated:YES];
+            [self removeSpecifier:self.savedSpecifiers[@"GroupCell6"] animated:YES];
             [self removeSpecifier:self.savedSpecifiers[@"AnimateGradientSwitch"] animated:YES];
             [self removeSpecifier:self.savedSpecifiers[@"GroupCell7"] animated:YES];
             [self removeSpecifier:self.savedSpecifiers[@"GFirstColor"] animated:YES];
@@ -170,7 +184,9 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
         else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell5"]]) {
 
             [self insertSpecifier:self.savedSpecifiers[@"GroupCell5"] afterSpecifierID:@"GradientSwitch" animated:YES];
-            [self insertSpecifier:self.savedSpecifiers[@"AnimateGradientSwitch"] afterSpecifierID:@"GroupCell5" animated:YES];
+            [self insertSpecifier:self.savedSpecifiers[@"GTransitionSwitch"] afterSpecifierID:@"GroupCell5" animated:YES];
+            [self insertSpecifier:self.savedSpecifiers[@"GroupCell6"] afterSpecifierID:@"GTransitionSwitch" animated:YES];
+            [self insertSpecifier:self.savedSpecifiers[@"AnimateGradientSwitch"] afterSpecifierID:@"GroupCell6" animated:YES];
             [self insertSpecifier:self.savedSpecifiers[@"GroupCell7"] afterSpecifierID:@"AnimateGradientSwitch" animated:YES];
             [self insertSpecifier:self.savedSpecifiers[@"GFirstColor"] afterSpecifierID:@"GroupCell7" animated:YES];
             [self insertSpecifier:self.savedSpecifiers[@"GSecondColor"] afterSpecifierID:@"GFirstColor" animated:YES];
