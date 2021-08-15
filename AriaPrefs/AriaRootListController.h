@@ -19,6 +19,10 @@
 @end
 
 
+@interface AriaPrysmRootListController : PSListController
+@end
+
+
 @interface AriaLinksRootListController : PSListController
 @end
 

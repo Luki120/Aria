@@ -1,4 +1,5 @@
-#import <UIKit/UIKit.h>
+@import UIKit;
+#import <dlfcn.h>
 #import "GcImagePickerUtils.h"
 #import "GcColorPickerUtils.h"
 
@@ -63,6 +64,14 @@
 @end
 
 
+@interface PrysmCardBackgroundViewController : UIViewController
+@property (nonatomic, strong, readwrite) UIView *overlayView;
+@property (nonatomic, strong, readwrite) _UIBackdropView *backdropView;
+@property (nonatomic, strong) UIImageView *prysmImageView;
+- (void)setPrysmImage;
+@end
+
+
 static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
 
 static BOOL giveMeTheImage;
@@ -70,6 +79,8 @@ static BOOL giveMeThoseGradients;
 static BOOL neatGradientAnimation;
 
 static int gradientDirection;
+
+static BOOL isPrysmImage;
 
 float alpha = 1.0f;
 
@@ -85,6 +96,7 @@ static void loadWithoutAGoddamnRespring() {
 	neatGradientAnimation = prefs[@"neatGradientAnimation"] ?  [prefs[@"neatGradientAnimation"] boolValue] : NO;
 	gradientDirection = prefs[@"gradientDirection"] ? [prefs[@"gradientDirection"] integerValue] : 0;
 	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
+	isPrysmImage = prefs[@"isPrysmImage"] ? [prefs[@"isPrysmImage"] boolValue] : NO;
 
 
 }
@@ -317,6 +329,73 @@ static void loadWithoutAGoddamnRespring() {
 
 
 
+%hook PrysmCardBackgroundViewController
+
+
+%property (nonatomic, strong) UIImageView *prysmImageView;
+
+
+%new
+
+
+- (void)setPrysmImage {
+
+
+	loadWithoutAGoddamnRespring();
+
+	[[self.view viewWithTag:10000] removeFromSuperview];
+
+	if(isPrysmImage) {
+
+		self.overlayView.hidden = YES;
+		self.backdropView.hidden = YES;
+
+		self.prysmImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+		self.prysmImageView.tag = 10000;
+		self.prysmImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmImage"];
+		self.prysmImageView.contentMode = UIViewContentModeScaleAspectFill;
+		self.prysmImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[self.view insertSubview:self.prysmImageView atIndex:0];
+
+
+/*		[UIView transitionWithView:self.prysmImageView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+			if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) self.prysmImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmImage"];
+			else self.prysmImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmLightImage"];
+
+		} completion:nil];
+*/
+
+	} else {
+
+		self.overlayView.hidden = NO;
+		self.backdropView.hidden = NO;
+
+	}
+
+}
+
+
+- (void)viewDidLayoutSubviews {
+
+
+	%orig;
+
+	[self setPrysmImage];
+
+	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"prysmImageApplied" object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"traitCollectionDidChange" object:nil];
+
+
+}
+
+
+%end
+
+
+
+
 %hook UIScreen
 
 
@@ -336,10 +415,69 @@ static void loadWithoutAGoddamnRespring() {
 
 
 
+/*void (*origPrysmView)(PrysmCardBackgroundViewController *self, SEL _cmd);
+
+void PrysmCardBackgroundViewController_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
+
+	origPrysmView(self, _cmd);
+
+}
+
+void setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
+
+	loadWithoutAGoddamnRespring();
+
+	if(isPrysmImage) {
+
+
+		self.backdropView.hidden = YES;
+
+		UIImageView *prysmImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+		prysmImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmImage"];
+		prysmImageView.contentMode = UIViewContentModeScaleAspectFill;
+		prysmImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+		[self.view insertSubview:prysmImageView atIndex:0];
+
+		/*[UIView transitionWithView:prysmImageView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+			if(self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) prysmImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmImage"];
+			else prysmImageView.image = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmLightImage"];
+
+		} completion:nil];
+	
+	}
+
+}
+
+
+%hook SpringBoard
+
+
+- (void)applicationDidFinishLaunching:(id)app {
+
+
+	%orig;
+
+	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(viewDidLayoutSubviews) name:@"prysmImageApplied" object:nil];
+
+	MSHookMessageEx(%c(PrysmCardBackgroundViewController), @selector(setPrysmImage), (IMP) &setPrysmImage, (IMP *) &origPrysmView);
+
+
+}
+
+
+%end*/
+
+
+
+
 %ctor {
 
 
 	loadWithoutAGoddamnRespring();
+
+	dlopen("/Library/MobileSubstrate/DynamicLibraries/Prysm.dylib", RTLD_NOW);
 
 
 }

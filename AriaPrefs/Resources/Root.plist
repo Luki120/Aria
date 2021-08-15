@@ -15,8 +15,6 @@
 				<string>giveMeTheImage</string>
 				<key>label</key>
 				<string>Enable</string>
-				<key>PostNotification</key>
-				<string>me.luki.ariaprefs/ReloadPrefs</string>
 				<key>id</key>
 				<string>ImageSwitch</string>
 			</dict>
@@ -215,6 +213,20 @@
 					<string>Upper Right Lower Left</string>
 					<string>Lower Right Upper Left</string>
 				</array>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSGroupCell</string>
+			</dict>
+			<dict>
+				<key>cell</key>
+				<string>PSLinkCell</string>
+				<key>detail</key>
+				<string>AriaPrysmRootListController</string>
+				<key>isController</key>
+				<true/>
+				<key>label</key>
+				<string>Prysm</string>
 			</dict>
 			<dict>
 				<key>cell</key>
