@@ -20,9 +20,9 @@
 			<key>defaults</key>
 			<string>me.luki.ariaprefs</string>
 			<key>action</key>
-			<string>discord</string>
+			<string>github</string>
 			<key>label</key>
-			<string>Chat With Us On Discord</string>
+			<string>Source Code 🔥</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -48,9 +48,9 @@
 			<key>defaults</key>
 			<string>me.luki.ariaprefs</string>
 			<key>action</key>
-			<string>github</string>
+			<string>discord</string>
 			<key>label</key>
-			<string>Source Code 🔥</string>
+			<string>Chat With Us On Discord</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -68,27 +68,11 @@
 			<key>defaults</key>
 			<string>me.luki.ariaprefs</string>
 			<key>action</key>
-			<string>arizona</string>
-			<key>label</key>
-			<string>Arizona</string>
-			<key>icon</key>
-			<string>Arizona@2x.png</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSButtonCell</string>
-			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.ariaprefs</string>
-			<key>action</key>
 			<string>elixir</string>
 			<key>label</key>
 			<string>Elixir</string>
 			<key>icon</key>
-			<string>Elixir@2x.png</string>
+			<string>Assets/Elixir@2x.png</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -100,23 +84,11 @@
 			<key>defaults</key>
 			<string>me.luki.ariaprefs</string>
 			<key>action</key>
-			<string>meredith</string>
+			<string>marie</string>
 			<key>label</key>
-			<string>Meredith</string>
+			<string>Marie</string>
 			<key>icon</key>
-			<string>Meredith@2x.png</string>
-		</dict>
-		<dict>
-			<key>cell</key>
-			<string>PSGroupCell</string>
-			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>footerAlignment</key>
-			<real>1</real>
-			<key>footerText</key>
-			<string>made by Luki with ❤️</string>
-			<key>isStaticText</key>
-			<true/>
+			<string>Assets/Marie@2x.png</string>
 		</dict>
 	</array>
 	<key>title</key>
