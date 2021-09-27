@@ -5,7 +5,8 @@
 
 
 
-@interface AriaTableCell : PSTableCell
+@interface AriaRootVC : PSListController
+@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
@@ -14,20 +15,20 @@
 @end
 
 
-@interface AriaRootListController : PSListController
-@property (nonatomic, retain) NSMutableDictionary *savedSpecifiers;
+@interface AriaPrysmVC : PSListController
+@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
-@interface AriaPrysmRootListController : PSListController
+@interface AriaLinksVC : PSListController
 @end
 
 
-@interface AriaLinksRootListController : PSListController
+@interface AriaContributorsVC : PSListController
 @end
 
 
-@interface AriaContributorsRootListController : PSListController
+@interface AriaTableCell : PSTableCell
 @end
 
 

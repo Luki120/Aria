@@ -2,7 +2,7 @@ include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = AriaPrefs
 
-AriaPrefs_FILES = AriaRootListController.m
+AriaPrefs_FILES = AriaRootVC.m
 AriaPrefs_CFLAGS = -fobjc-arc
 AriaPrefs_LIBRARIES = gcuniversal
 AriaPrefs_FRAMEWORKS = UIKit

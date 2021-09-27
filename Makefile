@@ -3,14 +3,8 @@ export TARGET := iphone:clang:latest:latest
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
+SUBPROJECTS += AriaPrefs AriaPrysm AriaStock
+
 include $(THEOS)/makefiles/common.mk
-
-TWEAK_NAME = Aria
-
-Aria_FILES = Aria.xm
-Aria_CFLAGS = -fobjc-arc
-Aria_LIBRARIES = gcuniversal
-
 include $(THEOS_MAKE_PATH)/tweak.mk
-SUBPROJECTS += AriaPrefs
 include $(THEOS_MAKE_PATH)/aggregate.mk

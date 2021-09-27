@@ -222,7 +222,7 @@
 				<key>cell</key>
 				<string>PSLinkCell</string>
 				<key>detail</key>
-				<string>AriaPrysmRootListController</string>
+				<string>AriaPrysmVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
@@ -238,11 +238,11 @@
 				<key>cellClass</key>
 				<string>AriaTableCell</string>
 				<key>detail</key>
-				<string>AriaLinksRootListController</string>
+				<string>AriaContributorsVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
-				<string>Take A Look</string>
+				<string>Contributors</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -254,11 +254,11 @@
 				<key>cellClass</key>
 				<string>AriaTableCell</string>
 				<key>detail</key>
-				<string>AriaContributorsRootListController</string>
+				<string>AriaLinksVC</string>
 				<key>isController</key>
 				<true/>
 				<key>label</key>
-				<string>Contributors</string>
+				<string>Take A Look</string>
 			</dict>
 			<dict>
 				<key>cell</key>
