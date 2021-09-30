@@ -1,4 +1,4 @@
-#import "Headers/Headers.h"
+#import "../Headers/Headers.h"
 
 
 %group AriaStock
@@ -8,7 +8,7 @@
 
 
 %property (nonatomic, strong) UIImageView *ariaImageView;
-%property (nonatomic, strong) AriaGradientView *ariaGradientView;
+%property (nonatomic, strong) AriaGradientView *gradientView;
 
 
 - (void)viewDidLoad { // create a notification observer to force proper dark/light mode in the CC
@@ -47,7 +47,7 @@
 
 	}
 
-	else if(giveMeThoseGradients) self.ariaGradientView.alpha = state.clampedPresentationProgress;
+	else if(giveMeThoseGradients) self.gradientView.alpha = state.clampedPresentationProgress;
 
 
 }
@@ -79,7 +79,7 @@
 
 	self.overlayBackgroundView.shouldCrossfade = YES;
 
-	// Hot good looking transition between dark/light mode
+	// Clean af transition between dark/light mode
 
 	[UIView transitionWithView:self.ariaImageView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
@@ -100,46 +100,22 @@
 
 	[[self.view viewWithTag:2811] removeFromSuperview];
 
-
 	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"gradientFirstColor" fallback:@"ffffff"];
 	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"gradientSecondColor" fallback:@"ffffff"];
 
+	if(!giveMeThoseGradients) return;
 
-	if(giveMeThoseGradients) {
+	self.gradientView = [[AriaGradientView alloc] initWithFrame:self.overlayBackgroundView.bounds];
+	self.gradientView.tag = 2811;
+	self.gradientView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
+	self.gradientView.clipsToBounds = YES;
+	self.gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+	self.gradientView.layer.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+	self.gradientView.layer.startPoint = CGPointMake(0.5,1); // Bottom to top, default
+	self.gradientView.layer.endPoint = CGPointMake(0.5,0);
+	[self.overlayBackgroundView insertSubview:self.gradientView atIndex:0];
 
-
-		self.ariaGradientView = [[AriaGradientView alloc] initWithFrame:self.overlayBackgroundView.bounds];
-		self.ariaGradientView.tag = 2811;
-		self.ariaGradientView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
-		self.ariaGradientView.clipsToBounds = YES;
-		self.ariaGradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-		self.ariaGradientView.layer.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-		self.ariaGradientView.layer.startPoint = CGPointMake(0.5,1); // Bottom to top, default
-		self.ariaGradientView.layer.endPoint = CGPointMake(0.5,0);
-		[self.overlayBackgroundView insertSubview:self.ariaGradientView atIndex:0];
-
-		self.overlayBackgroundView.shouldCrossfade = YES;
-
-
-	}
-
-
-	if(neatGradientAnimation) {
-
-			
-		CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"colors"];
-		animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-		animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
-		animation.fillMode = kCAFillModeBoth;
-		animation.duration = 4.5;
-		animation.repeatCount = HUGE_VALF; // Loop the animation forever
-		animation.autoreverses = YES;
-		animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-		animation.removedOnCompletion = NO;
-		[self.ariaGradientView.layer addAnimation:animation forKey:@"animateGradient"];
-
-
-	}
+	self.overlayBackgroundView.shouldCrossfade = YES;
 
 
 	switch(gradientDirection) {
@@ -147,61 +123,76 @@
 
 		case 0: // Bottom to Top
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0.5,1);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0.5,0);
+			self.gradientView.layer.startPoint = CGPointMake(0.5,1);
+			self.gradientView.layer.endPoint = CGPointMake(0.5,0);
 			break;
 
 
 		case 1: // Top to Bottom
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0.5,0);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0.5,1);
+			self.gradientView.layer.startPoint = CGPointMake(0.5,0);
+			self.gradientView.layer.endPoint = CGPointMake(0.5,1);
 			break;
 
 
 		case 2: // Left to Right
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0,0.5);
-			self.ariaGradientView.layer.endPoint = CGPointMake(1,0.5);
+			self.gradientView.layer.startPoint = CGPointMake(0,0.5);
+			self.gradientView.layer.endPoint = CGPointMake(1,0.5);
 			break;
 
 
 		case 3: // Right to Left
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(1,0.5);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0,0.5);
+			self.gradientView.layer.startPoint = CGPointMake(1,0.5);
+			self.gradientView.layer.endPoint = CGPointMake(0,0.5);
 			break;
 
 
 		case 4: // Upper Left lower right
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0,0);
-			self.ariaGradientView.layer.endPoint = CGPointMake(1,1);
+			self.gradientView.layer.startPoint = CGPointMake(0,0);
+			self.gradientView.layer.endPoint = CGPointMake(1,1);
 			break;
 
 
 		case 5: // Lower left upper right
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0,1);
-			self.ariaGradientView.layer.endPoint = CGPointMake(1,0);
+			self.gradientView.layer.startPoint = CGPointMake(0,1);
+			self.gradientView.layer.endPoint = CGPointMake(1,0);
 			break;
 
 
 		case 6: // Upper right lower left
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(1,0);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0,1);
+			self.gradientView.layer.startPoint = CGPointMake(1,0);
+			self.gradientView.layer.endPoint = CGPointMake(0,1);
 			break;
 
 
 		case 7: // Lower right upper left
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(1,1);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0,0);
+			self.gradientView.layer.startPoint = CGPointMake(1,1);
+			self.gradientView.layer.endPoint = CGPointMake(0,0);
 			break;
 
 
 	}
+
+
+	if(!neatGradientAnimation) return;
+
+	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"colors"];
+	animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+	animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
+	animation.fillMode = kCAFillModeBoth;
+	animation.duration = 4.5;
+	animation.repeatCount = HUGE_VALF; // Loop the animation forever
+	animation.autoreverses = YES;
+	animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+	animation.removedOnCompletion = NO;
+	[self.gradientView.layer addAnimation:animation forKey:@"animateGradient"];
+
 
 }
 
