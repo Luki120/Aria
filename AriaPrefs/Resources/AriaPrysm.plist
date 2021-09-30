@@ -49,6 +49,10 @@
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
+				<key>label</key>
+				<string>Blur intensity (alpha)</string>
+				<key>id</key>
+				<string>GroupCell-2</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -57,6 +61,8 @@
 				<real>1</real>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
+				<key>id</key>
+				<string>PrysmBlur</string>
 				<key>key</key>
 				<string>alpha</string>
 				<key>min</key>
