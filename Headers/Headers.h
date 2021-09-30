@@ -1,7 +1,7 @@
 @import UIKit;
 #import <substrate.h>
-#import "GcImagePickerUtils.h"
-#import "GcColorPickerUtils.h"
+#import <GcUniversal/GcImagePickerUtils.h>
+#import <GcUniversal/GcColorPickerUtils.h>
 
 
 static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
@@ -56,7 +56,6 @@ static void loadWithoutAGoddamnRespring() {
 
 
 @implementation AriaBlurView
-
 
 + (AriaBlurView *)sharedInstance {
 
@@ -147,7 +146,7 @@ static void loadWithoutAGoddamnRespring() {
 @interface CCUIModularControlCenterOverlayViewController : UIViewController
 @property (nonatomic, strong) MTMaterialView *overlayBackgroundView;
 @property (nonatomic, strong) UIImageView *ariaImageView;
-@property (nonatomic, strong) AriaGradientView *ariaGradientView;
+@property (nonatomic, strong) AriaGradientView *gradientView;
 - (void)unleashAriaImage;
 - (void)setAriaGradient;
 @end
