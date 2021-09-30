@@ -1,4 +1,4 @@
-#import "Headers/Headers.h"
+#import "../Headers/Headers.h"
 
 
 void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
@@ -19,6 +19,10 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 		prysmImageView.contentMode = UIViewContentModeScaleAspectFill;
 		prysmImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.view insertSubview:prysmImageView atIndex:0];
+
+		/*--- apparently we need to set the alpha here again for it to apply on the fly ---*/
+
+		[AriaBlurView sharedInstance].blurView.alpha = alpha;
 		[prysmImageView addSubview:[AriaBlurView sharedInstance].blurView];
 	
 	} else {
@@ -33,7 +37,7 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 void (*origVDLS)(PrysmCardBackgroundViewController *self, SEL _cmd);
 
-void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) {
+void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create notifications observers
 
 	origVDLS(self, _cmd);
 
@@ -41,7 +45,6 @@ void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"prysmImageApplied" object:nil];
-
 
 }
 
@@ -51,6 +54,8 @@ void(*origApplicationDidFinishLaunching)(SpringBoard *self, SEL _cmd, id app);
 void overrideApplicationDidFinishLaunching(SpringBoard *self, SEL _cmd, id app) {
 
 	origApplicationDidFinishLaunching(self, _cmd, app);
+
+	/*--- initialize our hook when WE decide it, fuck dlopen, this is better :nfr: ---*/
 
 	MSHookMessageEx(NSClassFromString(@"PrysmCardBackgroundViewController"), @selector(viewDidLayoutSubviews), (IMP) &overrideVDLS, (IMP *) &origVDLS);
 
