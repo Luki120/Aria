@@ -102,17 +102,19 @@
 
 	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"gradientFirstColor" fallback:@"ffffff"];
 	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"gradientSecondColor" fallback:@"ffffff"];
+	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 
 	if(!giveMeThoseGradients) return;
 
-	self.gradientView = [[AriaGradientView alloc] initWithFrame:self.overlayBackgroundView.bounds];
+	self.gradientView = [[AriaGradientView alloc] initWithFrame:self.view.bounds];
 	self.gradientView.tag = 2811;
 	self.gradientView.alpha = MSHookIvar<CCUIOverlayTransitionState*>(self, "_previousTransitionState").clampedPresentationProgress;
 	self.gradientView.clipsToBounds = YES;
 	self.gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-	self.gradientView.layer.colors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+	self.gradientView.layer.colors = gradientColors;
 	self.gradientView.layer.startPoint = CGPointMake(0.5,1); // Bottom to top, default
 	self.gradientView.layer.endPoint = CGPointMake(0.5,0);
+	self.gradientView.layer.masksToBounds = YES;
 	[self.overlayBackgroundView insertSubview:self.gradientView atIndex:0];
 
 	self.overlayBackgroundView.shouldCrossfade = YES;
@@ -182,11 +184,12 @@
 
 	if(!neatGradientAnimation) return;
 
-	CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"colors"];
+	CABasicAnimation *animation = [CABasicAnimation animation];
+	animation.keyPath = @"colors";
+	animation.fillMode = kCAFillModeBoth;
+	animation.duration =  4.5;
 	animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 	animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
-	animation.fillMode = kCAFillModeBoth;
-	animation.duration = 4.5;
 	animation.repeatCount = HUGE_VALF; // Loop the animation forever
 	animation.autoreverses = YES;
 	animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
