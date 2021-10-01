@@ -6,15 +6,28 @@
 
 static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
 
+#define isPrysm [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]
+
+// Aria Prysm
+
+static BOOL isPrysmImage;
+static BOOL prysmGradients;
+static BOOL prysmGradientAnimation;
+
+static float prysmAlpha = 1.0f;
+
+static int prysmGradientDirection;
+
+
+// Aria Stock
+
 static BOOL giveMeTheImage;
 static BOOL giveMeThoseGradients;
 static BOOL neatGradientAnimation;
 
-static int gradientDirection;
-
-static BOOL isPrysmImage;
-
 static float alpha = 1.0f;
+
+static int gradientDirection;
 
 
 static void loadWithoutAGoddamnRespring() {
@@ -22,14 +35,18 @@ static void loadWithoutAGoddamnRespring() {
 
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeToTheValues];
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
+
+	isPrysmImage = prefs[@"isPrysmImage"] ? [prefs[@"isPrysmImage"] boolValue] : NO;
+	prysmAlpha = prefs[@"prysmAlpha"] ? [prefs[@"prysmAlpha"] floatValue] : 1.0f;
+	prysmGradients = prefs[@"prysmGradients"] ? [prefs[@"prysmGradients"] boolValue] : NO;
+	prysmGradientDirection = prefs[@"prysmGradientDirection"] ? [prefs[@"prysmGradientDirection"] integerValue] : 0;
+	prysmGradientAnimation = prefs[@"prysmGradientAnimation"] ? [prefs[@"prysmGradientAnimation"] boolValue] : NO;
 	
 	giveMeTheImage = prefs[@"giveMeTheImage"] ? [prefs[@"giveMeTheImage"] boolValue] : NO;
 	giveMeThoseGradients = prefs[@"giveMeThoseGradients"] ? [prefs[@"giveMeThoseGradients"] boolValue] : NO;
 	neatGradientAnimation = prefs[@"neatGradientAnimation"] ?  [prefs[@"neatGradientAnimation"] boolValue] : NO;
 	gradientDirection = prefs[@"gradientDirection"] ? [prefs[@"gradientDirection"] integerValue] : 0;
 	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
-	isPrysmImage = prefs[@"isPrysmImage"] ? [prefs[@"isPrysmImage"] boolValue] : NO;
-
 
 }
 
@@ -83,7 +100,8 @@ static void loadWithoutAGoddamnRespring() {
 
 		self.blurView = [[AriaBlurView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
 		self.blurView.tag = 120;
-		self.blurView.alpha = alpha;
+		if(!isPrysm) self.blurView.alpha = alpha;
+		else self.blurView.alpha = prysmAlpha;
 		self.blurView._blurRadius = 80.0;
 		self.blurView._blurQuality = @"high";
 		self.blurView.blurRadiusSetOnce = NO;

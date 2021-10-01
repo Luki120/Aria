@@ -12,6 +12,7 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
 static void postNSNotification() {
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmImageApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmGradientsApplied" object:nil];
 
 }
 
@@ -40,6 +41,30 @@ static void postNSNotification() {
 	}
 
 	return _specifiers;
+
+}
+
+
+- (id)init {
+
+	self = [super init];
+
+	if(self) {
+
+		UIButton *infoButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+		infoButton.frame = CGRectMake(0,0,30,30);
+		infoButton.tintColor = [UIColor colorWithRed: 0.62 green: 0.36 blue: 0.91 alpha: 1.00];
+		infoButton.layer.cornerRadius = infoButton.frame.size.height / 2;
+		infoButton.layer.masksToBounds = YES;
+		[infoButton setImage:[UIImage systemImageNamed:@"infinity"] forState:UIControlStateNormal];
+		[infoButton addTarget:self action:@selector(buttonTapped) forControlEvents:UIControlEventTouchUpInside];
+
+		UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+		self.navigationItem.rightBarButtonItem = changelogButtonItem;
+
+	}
+
+	return self;
 
 }
 
@@ -79,6 +104,21 @@ static void postNSNotification() {
 	[super viewDidLoad];
 	[self reloadSpecifiers];
 
+
+}
+
+
+- (void)buttonTapped {
+
+	AudioServicesPlaySystemSound(1521);
+
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The options you enable here will only inject if you either don't have Prysm installed or disabled it only with iCleaner Pro." preferredStyle:UIAlertControllerStyleAlert];
+
+	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Gotcha" style:UIAlertActionStyleCancel handler:nil];
+
+	[alert addAction:dismissAction];
+
+	[self presentViewController:alert animated:YES completion:nil];
 
 }
 
@@ -146,13 +186,13 @@ static void postNSNotification() {
 
 - (NSArray *)specifiers {
 
-	if (!_specifiers) {
+	if(!_specifiers) {
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"AriaPrysm" target:self];
 
-		NSArray *chosenIDs = @[@"GroupCell-1", @"DarkPrysmImage", @"GroupCell-2", @"PrysmBlur"];
+		NSArray *chosenIDs = @[@"GroupCell-1", @"DarkPrysmImage", @"GroupCell-2", @"PrysmBlur", @"GroupCell-3", @"PRYAnimateGradientSwitch", @"GroupCell-4", @"PRYGFirstColor", @"PRYGSecondColor", @"GroupCell-5", @"PRYGradientDirection"];
 
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [[NSMutableDictionary alloc] init];
+		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
 
 		for(PSSpecifier *specifier in _specifiers)
 
@@ -183,6 +223,16 @@ static void postNSNotification() {
 		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] afterSpecifierID:@"PrysmSwitch" animated:NO];
 
 
+	if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
+
+		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] animated:NO];
+
+
+	else if(![[self readPreferenceValue:[self specifierForID:@"GroupCell-3"]] boolValue])
+
+		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:NO];
+
+
 }
 
 
@@ -193,6 +243,7 @@ static void postNSNotification() {
 	[self reloadSpecifiers];
 
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmImageChanged"), NULL, 0);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmGradientColorsChanged"), NULL, 0);
 
 }
 
@@ -214,6 +265,7 @@ static void postNSNotification() {
 	[settings writeToFile:takeMeToTheValues atomically:YES];
 
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmImageApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmGradientsApplied" object:nil];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
@@ -228,6 +280,22 @@ static void postNSNotification() {
 		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
 
 			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] afterSpecifierID:@"PrysmSwitch" animated:YES];
+
+
+	}
+
+
+	if([key isEqualToString:@"prysmGradients"]) {
+
+
+		if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
+
+		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] animated:YES];
+
+
+		else if(![[self readPreferenceValue:[self specifierForID:@"GroupCell-3"]] boolValue])
+
+		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:YES];
 
 
 	}
