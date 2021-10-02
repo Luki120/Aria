@@ -58,8 +58,6 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 	prysmGradientView.clipsToBounds = YES;
 	prysmGradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	prysmGradientView.layer.colors = gradientColors;
-	prysmGradientView.layer.startPoint = CGPointMake(0.5,1); // Bottom to top, default
-	prysmGradientView.layer.endPoint = CGPointMake(0.5,0);
 	[self.view insertSubview:prysmGradientView atIndex:0];
 
 	switch(prysmGradientDirection) {
@@ -190,9 +188,7 @@ void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 
 __attribute__((constructor)) static void init() {
 
-	NSFileManager *fileM = [NSFileManager defaultManager];
-
-	if(![fileM fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]) return;
+	if(!isPrysm) return;
 
 	loadWithoutAGoddamnRespring();
 

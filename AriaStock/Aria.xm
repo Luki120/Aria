@@ -63,6 +63,9 @@
 
 	[[[AriaBlurView sharedInstance].blurView viewWithTag:120] removeFromSuperview];
 
+	UIImage *darkImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"];
+	UIImage *lightImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];
+
 	if(!giveMeTheImage) return;
 
 	if(!self.ariaImageView) {
@@ -83,7 +86,7 @@
 
 	[UIView transitionWithView:self.ariaImageView duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
-		self.ariaImageView.image = (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) ? [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLookingImage"] : [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"hotGoodLightLookingImage"];
+		self.ariaImageView.image = userInterfaceStyle ? darkImage : lightImage;
 
 	} completion:nil];
 
@@ -112,8 +115,6 @@
 	self.gradientView.clipsToBounds = YES;
 	self.gradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.gradientView.layer.colors = gradientColors;
-	self.gradientView.layer.startPoint = CGPointMake(0.5,1); // Bottom to top, default
-	self.gradientView.layer.endPoint = CGPointMake(0.5,0);
 	self.gradientView.layer.masksToBounds = YES;
 	[self.overlayBackgroundView insertSubview:self.gradientView atIndex:0];
 
@@ -227,9 +228,7 @@
 
 %ctor {
 
-	NSFileManager *fileM = [NSFileManager defaultManager];
-
-	if([fileM fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]) return;
+	if(isPrysm) return;
 
 	loadWithoutAGoddamnRespring();
 
