@@ -1,8 +1,8 @@
 Package: me.luki.aria
 Name: Aria
-Version: 0.9.0
+Version: 0.9.0~RC
 Architecture: iphoneos-arm
-Description: Choose a BG image for your CC on the fly
+Description: Add some flavors to the stock CC or Prysm on the fly
 Maintainer: Luki
 Author: Luki
 Section: Tweaks
