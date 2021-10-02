@@ -228,7 +228,7 @@ static void postNSNotification() {
 		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] animated:NO];
 
 
-	else if(![[self readPreferenceValue:[self specifierForID:@"GroupCell-3"]] boolValue])
+	else if(![self containsSpecifier:[self specifierForID:@"GroupCell-3"]])
 
 		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:NO];
 
@@ -293,7 +293,7 @@ static void postNSNotification() {
 		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] animated:YES];
 
 
-		else if(![[self readPreferenceValue:[self specifierForID:@"GroupCell-3"]] boolValue])
+		else if(![self containsSpecifier:[self specifierForID:@"GroupCell-3"]])
 
 		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:YES];
 
