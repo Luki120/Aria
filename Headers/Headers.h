@@ -56,6 +56,9 @@ static void loadWithoutAGoddamnRespring() {
 
 
 @interface _UIBackdropView : UIView
+@property (assign, nonatomic) BOOL blurRadiusSetOnce;
+@property (copy, nonatomic) NSString *_blurQuality;
+@property (assign, nonatomic) double _blurRadius;
 - (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
 @end
 
@@ -67,9 +70,6 @@ static void loadWithoutAGoddamnRespring() {
 
 @interface AriaBlurView : _UIBackdropView
 @property (nonatomic, strong) AriaBlurView *blurView;
-@property (assign, nonatomic) BOOL blurRadiusSetOnce;
-@property (copy, nonatomic) NSString *_blurQuality;
-@property (assign, nonatomic) double _blurRadius;
 @end
 
 
