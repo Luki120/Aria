@@ -6,7 +6,7 @@
 static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
 
 
-#define tint [UIColor colorWithRed: 0.62 green: 0.36 blue: 0.91 alpha: 1.00]
+#define tint [UIColor colorWithRed: 0.38 green: 0.22 blue: 0.40 alpha: 1.00]
 
 
 static void postNSNotification() {
@@ -53,7 +53,7 @@ static void postNSNotification() {
 
 		UIButton *infoButton =  [UIButton buttonWithType:UIButtonTypeCustom];
 		infoButton.frame = CGRectMake(0,0,30,30);
-		infoButton.tintColor = [UIColor colorWithRed: 0.62 green: 0.36 blue: 0.91 alpha: 1.00];
+		infoButton.tintColor = [UIColor colorWithRed: 0.38 green: 0.22 blue: 0.40 alpha: 1.00];
 		infoButton.layer.cornerRadius = infoButton.frame.size.height / 2;
 		infoButton.layer.masksToBounds = YES;
 		[infoButton setImage:[UIImage systemImageNamed:@"infinity"] forState:UIControlStateNormal];
