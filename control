@@ -1,6 +1,6 @@
 Package: me.luki.aria
 Name: Aria
-Version: 0.9.0~RC
+Version: 0.9.2~RC
 Architecture: iphoneos-arm
 Description: Add some flavors to the stock CC or Prysm on the fly
 Maintainer: Luki
