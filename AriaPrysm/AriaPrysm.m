@@ -1,6 +1,5 @@
 #import "../Headers/Headers.h"
 
-
 void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	loadWithoutAGoddamnRespring();
@@ -8,7 +7,8 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 	[[self.view viewWithTag:10000] removeFromSuperview];
 	[[[AriaBlurView sharedInstance].blurView viewWithTag:120] removeFromSuperview];
 
-	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmImage"];
+	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmDarkImage"];
+	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmLightImage"];
 
 	self.overlayView.hidden = NO;
 	self.backdropView.hidden = NO;
@@ -20,7 +20,6 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	UIImageView *prysmImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
 	prysmImageView.tag = 10000;
-	prysmImageView.image = prysmDarkImage;
 	prysmImageView.contentMode = UIViewContentModeScaleAspectFill;
 	prysmImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view insertSubview:prysmImageView atIndex:0];
@@ -29,6 +28,12 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	[AriaBlurView sharedInstance].blurView.alpha = alpha;
 	[prysmImageView addSubview:[AriaBlurView sharedInstance].blurView];
+
+	[UIView transitionWithView:self.view duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
+
+		prysmImageView.image = userInterfaceStyle ? prysmDarkImage : prysmLightImage;
+
+	} completion:nil];
 
 }
 
@@ -138,6 +143,17 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 }
 
 
+void (*origTCDC)(UIScreen *self, SEL _cmd, id previous);
+
+void overrideTCDC(UIScreen *self, SEL _cmd, id previous) { // create notifications observers
+
+	origTCDC(self, _cmd, previous);
+
+	[NSNotificationCenter.defaultCenter postNotificationName:@"traitCollectionDidChange" object:nil];
+
+}
+
+
 void (*origVDLS)(PrysmCardBackgroundViewController *self, SEL _cmd);
 
 void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create notifications observers
@@ -152,6 +168,8 @@ void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"prysmImageApplied" object:nil];
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmGradient) name:@"prysmGradientsApplied" object:nil];
 
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"traitCollectionDidChange" object:nil];
+
 }
 
 
@@ -163,7 +181,8 @@ void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 
 	/*--- initialize the hooks when WE decide it, fuck dlopen, this is better :nfr: ---*/
 
-	MSHookMessageEx(NSClassFromString(@"PrysmCardBackgroundViewController"), @selector(viewDidLayoutSubviews), (IMP) &overrideVDLS, (IMP *) &origVDLS);
+	MSHookMessageEx(Class(@"UIScreen"), @selector(traitCollectionDidChange:), (IMP) &overrideTCDC, (IMP *) &origTCDC);
+	MSHookMessageEx(Class(@"PrysmCardBackgroundViewController"), @selector(viewDidLayoutSubviews), (IMP) &overrideVDLS, (IMP *) &origVDLS);	
 
 	class_addMethod (
 		
@@ -192,6 +211,6 @@ __attribute__((constructor)) static void init() {
 
 	loadWithoutAGoddamnRespring();
 
-	MSHookMessageEx(NSClassFromString(@"SpringBoard"), @selector(applicationDidFinishLaunching:), (IMP) &overrideADFL, (IMP *) &origADFL);
+	MSHookMessageEx(Class(@"SpringBoard"), @selector(applicationDidFinishLaunching:), (IMP) &overrideADFL, (IMP *) &origADFL);
 
 }

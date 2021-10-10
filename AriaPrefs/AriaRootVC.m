@@ -190,7 +190,7 @@ static void postNSNotification() {
 
 		_specifiers = [self loadSpecifiersFromPlistName:@"AriaPrysm" target:self];
 
-		NSArray *chosenIDs = @[@"GroupCell-1", @"DarkPrysmImage", @"GroupCell-2", @"PrysmBlur", @"GroupCell-3", @"PRYAnimateGradientSwitch", @"GroupCell-4", @"PRYGFirstColor", @"PRYGSecondColor", @"GroupCell-5", @"PRYGradientDirection"];
+		NSArray *chosenIDs = @[@"GroupCell-1", @"DarkPrysmImage", @"LightPrysmImage", @"GroupCell-2", @"PrysmBlur", @"GroupCell-3", @"PRYAnimateGradientSwitch", @"GroupCell-4", @"PRYGFirstColor", @"PRYGSecondColor", @"GroupCell-5", @"PRYGradientDirection"];
 
 		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
 
@@ -215,12 +215,12 @@ static void postNSNotification() {
 
 	if(![[self readPreferenceValue:[self specifierForID:@"PrysmSwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] animated:NO];
+		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] animated:NO];
 
 
 	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
 
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] afterSpecifierID:@"PrysmSwitch" animated:NO];
+		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] afterSpecifierID:@"PrysmSwitch" animated:NO];
 
 
 	if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
@@ -274,12 +274,12 @@ static void postNSNotification() {
 
 		if(![[self readPreferenceValue:[self specifierForID:@"PrysmSwitch"]] boolValue])
 
-			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] animated:YES];
+			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] animated:YES];
 
 
 		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
 
-			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] afterSpecifierID:@"PrysmSwitch" animated:YES];
+			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlur"]] afterSpecifierID:@"PrysmSwitch" animated:YES];
 
 
 	}

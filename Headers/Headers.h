@@ -8,6 +8,7 @@ static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.a
 
 #define isPrysm [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]
 #define userInterfaceStyle (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
+#define Class(string) NSClassFromString(string)
 
 // Aria Prysm
 
