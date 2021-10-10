@@ -6,15 +6,16 @@
 
 ## Features
 
-* Custom Light Mode image.
 * Custom Dark Mode image.
+* Custom Light Mode image.
 * Epic Blur (Gaussian) & custom intensity.
 * Gradients with custom directions & optional animation.
 
 
 ## Prysm Support
 
-* Custom image.
+* Custom Dark Mode image.
+* Custom Light Mode image.
 * Epic Blur (Gaussian) & custom intensity.
 * Gradients with custom directions & optional animation.
 
