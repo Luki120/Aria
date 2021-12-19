@@ -1,19 +1,22 @@
-#import "../Headers/Headers.h"
+#import "Headers/Headers.h"
+
 
 void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	loadWithoutAGoddamnRespring();
 
+	if(prysmGradients) return;
+
 	[[self.view viewWithTag:10000] removeFromSuperview];
 	[[[AriaBlurView sharedInstance].blurView viewWithTag:120] removeFromSuperview];
-
-	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmDarkImage"];
-	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmLightImage"];
 
 	self.overlayView.hidden = NO;
 	self.backdropView.hidden = NO;
 
 	if(!isPrysmImage) return;
+
+	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"prysmDarkImage"];
+	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"prysmLightImage"];
 
 	self.overlayView.hidden = YES;
 	self.backdropView.hidden = YES;
@@ -24,19 +27,16 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 	prysmImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view insertSubview:prysmImageView atIndex:0];
 
-	/*--- apparently we need to set the alpha here again for it to apply on the fly ---*/
-
-	[AriaBlurView sharedInstance].blurView.alpha = alpha;
-	[prysmImageView addSubview:[AriaBlurView sharedInstance].blurView];
-
 	[UIView transitionWithView:self.view duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
-		prysmImageView.image = userInterfaceStyle ? prysmDarkImage : prysmLightImage;
+		prysmImageView.image = kUserInterfaceStyle ? prysmDarkImage : prysmLightImage;
 
 	} completion:nil];
 
-}
+	[AriaBlurView sharedInstance].blurView.alpha = prysmAlpha;
+	[prysmImageView addSubview:[AriaBlurView sharedInstance].blurView];
 
+}
 
 void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
@@ -46,14 +46,14 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	[[self.view viewWithTag:2811] removeFromSuperview];
 
-	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmGradientFirstColor" fallback:@"ffffff"];
-	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:@"me.luki.ariaprefs" withKey:@"prysmGradientSecondColor" fallback:@"ffffff"];
-	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-
 	self.overlayView.hidden = NO;
 	self.backdropView.hidden = NO;
 
 	if(!prysmGradients) return;
+
+	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:@"prysmGradientFirstColor" fallback:@"ffffff"];
+	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:@"prysmGradientSecondColor" fallback:@"ffffff"];
+	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 
 	self.overlayView.hidden = YES;
 	self.backdropView.hidden = YES;
@@ -67,20 +67,11 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	switch(prysmGradientDirection) {
 
-
-		case 0: // Bottom to Top
-
-			prysmGradientView.layer.startPoint = CGPointMake(0.5,1);
-			prysmGradientView.layer.endPoint = CGPointMake(0.5,0);
-			break;
-
-
 		case 1: // Top to Bottom
 
 			prysmGradientView.layer.startPoint = CGPointMake(0.5,0);
 			prysmGradientView.layer.endPoint = CGPointMake(0.5,1);
 			break;
-
 
 		case 2: // Left to Right
 
@@ -88,13 +79,11 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 			prysmGradientView.layer.endPoint = CGPointMake(1,0.5);
 			break;
 
-
 		case 3: // Right to Left
 
 			prysmGradientView.layer.startPoint = CGPointMake(1,0.5);
 			prysmGradientView.layer.endPoint = CGPointMake(0,0.5);
 			break;
-
 
 		case 4: // Upper Left lower right
 
@@ -102,13 +91,11 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 			prysmGradientView.layer.endPoint = CGPointMake(1,1);
 			break;
 
-
 		case 5: // Lower left upper right
 
 			prysmGradientView.layer.startPoint = CGPointMake(0,1);
 			prysmGradientView.layer.endPoint = CGPointMake(1,0);
 			break;
-
 
 		case 6: // Upper right lower left
 
@@ -116,13 +103,17 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 			prysmGradientView.layer.endPoint = CGPointMake(0,1);
 			break;
 
-
 		case 7: // Lower right upper left
 
 			prysmGradientView.layer.startPoint = CGPointMake(1,1);
 			prysmGradientView.layer.endPoint = CGPointMake(0,0);
 			break;
 
+		default: // Bottom to Top
+
+			prysmGradientView.layer.startPoint = CGPointMake(0.5,1);
+			prysmGradientView.layer.endPoint = CGPointMake(0.5,0);
+			break;
 
 	}
 
@@ -142,17 +133,15 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 }
 
+void (*origTCDC)(UIScreen *self, SEL _cmd, id previousTrait);
 
-void (*origTCDC)(UIScreen *self, SEL _cmd, id previous);
+void overrideTCDC(UIScreen *self, SEL _cmd, id previousTrait) {
 
-void overrideTCDC(UIScreen *self, SEL _cmd, id previous) { // create notifications observers
-
-	origTCDC(self, _cmd, previous);
+	origTCDC(self, _cmd, previousTrait);
 
 	[NSNotificationCenter.defaultCenter postNotificationName:@"traitCollectionDidChange" object:nil];
 
 }
-
 
 void (*origVDLS)(PrysmCardBackgroundViewController *self, SEL _cmd);
 
@@ -172,7 +161,6 @@ void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create
 
 }
 
-
 void(*origADFL)(SpringBoard *self, SEL _cmd, id app);
 
 void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
@@ -185,8 +173,8 @@ void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 	MSHookMessageEx(Class(@"PrysmCardBackgroundViewController"), @selector(viewDidLayoutSubviews), (IMP) &overrideVDLS, (IMP *) &origVDLS);	
 
 	class_addMethod (
-		
-		NSClassFromString(@"PrysmCardBackgroundViewController"),
+
+		Class(@"PrysmCardBackgroundViewController"),
 		@selector(setPrysmImage),
 		(IMP)&new_setPrysmImage,
 		"v@:"
@@ -194,8 +182,8 @@ void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 	);
 
 	class_addMethod (
-		
-		NSClassFromString(@"PrysmCardBackgroundViewController"),
+
+		Class(@"PrysmCardBackgroundViewController"),
 		@selector(setPrysmGradient),
 		(IMP)&new_setPrysmGradient,
 		"v@:"
@@ -207,7 +195,7 @@ void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 
 __attribute__((constructor)) static void init() {
 
-	if(!isPrysm) return;
+	if(!kIsPrysm) return;
 
 	loadWithoutAGoddamnRespring();
 

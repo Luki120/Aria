@@ -12,17 +12,17 @@
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<key>key</key>
-				<string>isPrysmImage</string>
+				<string>giveMeTheImage</string>
 				<key>label</key>
 				<string>Enable</string>
 				<key>id</key>
-				<string>PrysmSwitch</string>
+				<string>ImageSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>id</key>
-				<string>GroupCell-1</string>
+				<string>GroupCell1</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -30,15 +30,13 @@
 				<key>cellClass</key>
 				<string>GcImagePickerCell</string>
 				<key>label</key>
-				<string>Prysm Dark Image</string>
+				<string>Neat Dark Image</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<key>id</key>
-				<string>DarkPrysmImage</string>
-				<key>PostNotification</key>
-				<string>me.luki.ariaprefs/prysmImageChanged</string>
+				<string>DarkImage</string>
 				<key>key</key>
-				<string>prysmDarkImage</string>
+				<string>stockDarkImage</string>
 				<key>usesPhotos</key>
 				<true/>
 				<key>usesVideos</key>
@@ -52,15 +50,13 @@
 				<key>cellClass</key>
 				<string>GcImagePickerCell</string>
 				<key>label</key>
-				<string>Prysm Light Image</string>
+				<string>Fancy Light Image</string>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<key>id</key>
-				<string>LightPrysmImage</string>
-				<key>PostNotification</key>
-				<string>me.luki.ariaprefs/prysmImageChanged</string>
+				<string>LightImage</string>
 				<key>key</key>
-				<string>prysmLightImage</string>
+				<string>stockLightImage</string>
 				<key>usesPhotos</key>
 				<true/>
 				<key>usesVideos</key>
@@ -74,7 +70,7 @@
 				<key>label</key>
 				<string>Epic blur intensity (alpha)</string>
 				<key>id</key>
-				<string>GroupCell-2</string>
+				<string>GroupCell2</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -83,22 +79,22 @@
 				<real>0.85</real>
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
-				<key>id</key>
-				<string>PrysmBlurSlider</string>
 				<key>key</key>
-				<string>prysmAlpha</string>
+				<string>alpha</string>
 				<key>min</key>
 				<real>0</real>
 				<key>max</key>
 				<real>1</real>
 				<key>showValue</key>
 				<true/>
+				<key>id</key>
+				<string>BlurSlider</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>id</key>
-				<string>PRYGaussianGroupCell</string>
+				<string>GaussianGroupCell</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -110,7 +106,7 @@
 				<key>label</key>
 				<string>Gaussian Blur</string>
 				<key>id</key>
-				<string>PRYGaussianBlurButton</string>
+				<string>GaussianBlurButton</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -124,17 +120,17 @@
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<key>key</key>
-				<string>prysmGradients</string>
+				<string>giveMeThoseGradients</string>
 				<key>label</key>
 				<string>Gradients</string>
 				<key>id</key>
-				<string>PRYGradientSwitch</string>
+				<string>GradientSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>id</key>
-				<string>GroupCell-3</string>
+				<string>GroupCell3</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -144,17 +140,17 @@
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<key>key</key>
-				<string>prysmGradientAnimation</string>
+				<string>neatGradientAnimation</string>
 				<key>label</key>
 				<string>Animate Gradient</string>
 				<key>id</key>
-				<string>PRYAnimateGradientSwitch</string>
+				<string>AnimateGradientSwitch</string>
 			</dict>
 			<dict>
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>id</key>
-				<string>GroupCell-4</string>
+				<string>GroupCell4</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -164,13 +160,11 @@
 				<key>label</key>
 				<string>First Color</string>
 				<key>defaults</key>
-				<string>me.luki.ariaprefscolors</string>
-				<key>PostNotification</key>
-				<string>me.luki.ariaprefs/prysmGradientColorsChanged</string>
+				<string>me.luki.ariaprefs</string>
 				<key>id</key>
-				<string>PRYGFirstColor</string>
+				<string>GFirstColor</string>
 				<key>key</key>
-				<string>prysmGradientFirstColor</string>
+				<string>gradientFirstColor</string>
 				<key>supportsAlpha</key>
 				<true/>
 				<key>fallback</key>
@@ -184,13 +178,11 @@
 				<key>label</key>
 				<string>Second Color</string>
 				<key>defaults</key>
-				<string>me.luki.ariaprefscolors</string>
-				<key>PostNotification</key>
-				<string>me.luki.ariaprefs/prysmGradientColorsChanged</string>
+				<string>me.luki.ariaprefs</string>
 				<key>id</key>
-				<string>PRYGSecondColor</string>
+				<string>GSecondColor</string>
 				<key>key</key>
-				<string>prysmGradientSecondColor</string>
+				<string>gradientSecondColor</string>
 				<key>supportsAlpha</key>
 				<true/>
 				<key>fallback</key>
@@ -200,7 +192,7 @@
 				<key>cell</key>
 				<string>PSGroupCell</string>
 				<key>id</key>
-				<string>GroupCell-5</string>
+				<string>GroupCell5</string>
 			</dict>
 			<dict>
 				<key>cell</key>
@@ -210,11 +202,11 @@
 				<key>defaults</key>
 				<string>me.luki.ariaprefs</string>
 				<key>id</key>
-				<string>PRYGradientDirection</string>
+				<string>GradientDirections</string>
 				<key>default</key>
 				<integer>0</integer>
 				<key>key</key>
-				<string>prysmGradientDirection</string>
+				<string>gradientDirection</string>
 				<key>label</key>
 				<string>Gradient Direction</string>
 				<key>validValues</key>
