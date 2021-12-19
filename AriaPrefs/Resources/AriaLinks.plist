@@ -14,27 +14,19 @@
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.ariaprefs</string>
+			<string>AriaTintCell</string>
 			<key>action</key>
-			<string>github</string>
+			<string>launchDiscord</string>
 			<key>label</key>
-			<string>Source Code 🔥</string>
+			<string>Chat With Us On Discord</string>
 		</dict>
 		<dict>
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.ariaprefs</string>
+			<string>AriaTintCell</string>
 			<key>action</key>
-			<string>paypal</string>
+			<string>launchPayPal</string>
 			<key>label</key>
 			<string>Donate To Luki 🥰</string>
 		</dict>
@@ -42,15 +34,11 @@
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.ariaprefs</string>
+			<string>AriaTintCell</string>
 			<key>action</key>
-			<string>discord</string>
+			<string>launchGitHub</string>
 			<key>label</key>
-			<string>Chat With Us On Discord</string>
+			<string>Source Code 🔥</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -62,13 +50,9 @@
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.ariaprefs</string>
+			<string>AriaTintCell</string>
 			<key>action</key>
-			<string>elixir</string>
+			<string>launchElixir</string>
 			<key>label</key>
 			<string>Elixir</string>
 			<key>icon</key>
@@ -78,13 +62,9 @@
 			<key>cell</key>
 			<string>PSButtonCell</string>
 			<key>cellClass</key>
-			<string>AriaTableCell</string>
-			<key>default</key>
-			<false/>
-			<key>defaults</key>
-			<string>me.luki.ariaprefs</string>
+			<string>AriaTintCell</string>
 			<key>action</key>
-			<string>marie</string>
+			<string>launchMarie</string>
 			<key>label</key>
 			<string>Marie</string>
 			<key>icon</key>

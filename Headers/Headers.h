@@ -1,65 +1,17 @@
-@import UIKit;
 #import <substrate.h>
-#import <GcUniversal/GcImagePickerUtils.h>
-#import <GcUniversal/GcColorPickerUtils.h>
+#import "Headers/Prefs.h"
+#import "Managers/AriaImageManager.h"
+#import <AudioToolbox/AudioServices.h>
 
 
-static NSString *takeMeToTheValues = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
-
-#define isPrysm [[NSFileManager defaultManager] fileExistsAtPath:@"Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]
-#define userInterfaceStyle (UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark)
-#define Class(string) NSClassFromString(string)
-
-// Aria Prysm
-
-static BOOL isPrysmImage;
-static BOOL prysmGradients;
-static BOOL prysmGradientAnimation;
-
-static float prysmAlpha = 1.0f;
-
-static int prysmGradientDirection;
-
-
-// Aria Stock
-
-static BOOL giveMeTheImage;
-static BOOL giveMeThoseGradients;
-static BOOL neatGradientAnimation;
-
-static float alpha = 1.0f;
-
-static int gradientDirection;
-
-
-static void loadWithoutAGoddamnRespring() {
-
-
-	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:takeMeToTheValues];
-	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
-
-	isPrysmImage = prefs[@"isPrysmImage"] ? [prefs[@"isPrysmImage"] boolValue] : NO;
-	prysmAlpha = prefs[@"prysmAlpha"] ? [prefs[@"prysmAlpha"] floatValue] : 1.0f;
-	prysmGradients = prefs[@"prysmGradients"] ? [prefs[@"prysmGradients"] boolValue] : NO;
-	prysmGradientDirection = prefs[@"prysmGradientDirection"] ? [prefs[@"prysmGradientDirection"] integerValue] : 0;
-	prysmGradientAnimation = prefs[@"prysmGradientAnimation"] ? [prefs[@"prysmGradientAnimation"] boolValue] : NO;
-	
-	giveMeTheImage = prefs[@"giveMeTheImage"] ? [prefs[@"giveMeTheImage"] boolValue] : NO;
-	giveMeThoseGradients = prefs[@"giveMeThoseGradients"] ? [prefs[@"giveMeThoseGradients"] boolValue] : NO;
-	neatGradientAnimation = prefs[@"neatGradientAnimation"] ?  [prefs[@"neatGradientAnimation"] boolValue] : NO;
-	gradientDirection = prefs[@"gradientDirection"] ? [prefs[@"gradientDirection"] integerValue] : 0;
-	alpha = prefs[@"alpha"] ? [prefs[@"alpha"] floatValue] : 1.0f;
-
-}
-
-
-// Aria Global
+#pragma mark Custom Views
 
 
 @interface _UIBackdropView : UIView
 @property (assign, nonatomic) BOOL blurRadiusSetOnce;
 @property (copy, nonatomic) NSString *_blurQuality;
 @property (assign, nonatomic) double _blurRadius;
+- (id)initWithSettings:(id)arg1;
 - (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
 @end
 
@@ -71,42 +23,47 @@ static void loadWithoutAGoddamnRespring() {
 
 @interface AriaBlurView : _UIBackdropView
 @property (nonatomic, strong) AriaBlurView *blurView;
++ (instancetype)alloc __attribute__((unavailable("alloc not available, call sharedInstance instead")));
+- (instancetype)copy __attribute__((unavailable("copy not available, call sharedInstance instead")));
+- (instancetype)init __attribute__((unavailable("init not available, call sharedInstance instead")));
++ (instancetype)new __attribute__((unavailable("new not available, call sharedInstance instead")));
 @end
 
 
 @implementation AriaBlurView
+
 
 + (AriaBlurView *)sharedInstance {
 
 	static AriaBlurView *sharedInstance = nil;
 	static dispatch_once_t onceToken;
 
-	dispatch_once(&onceToken, ^{
-
-		sharedInstance = [AriaBlurView new];
-
-	});
+	dispatch_once(&onceToken, ^{ sharedInstance = [[self alloc] initPrivate]; });
 
 	return sharedInstance;
 
 }
 
 
-- (id)init {
+- (id)initPrivate {
 
 	self = [super init];
 
-	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+	if(self) {
 
-	if(!self.blurView) {
+		if(!self.blurView) {
 
-		self.blurView = [[AriaBlurView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
-		self.blurView.tag = 120;
-		if(!isPrysm) self.blurView.alpha = alpha;
-		else self.blurView.alpha = prysmAlpha;
-		self.blurView._blurRadius = 80.0;
-		self.blurView._blurQuality = @"high";
-		self.blurView.blurRadiusSetOnce = NO;
+			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+
+			self.blurView = [[AriaBlurView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
+			self.blurView.tag = 120;
+			if(kIsPrysm) self.blurView.alpha = prysmAlpha;
+			else self.blurView.alpha = alpha;
+			self.blurView._blurRadius = 80.0;
+			self.blurView._blurQuality = @"high";
+			self.blurView.blurRadiusSetOnce = NO;
+
+		}
 
 	}
 
@@ -127,17 +84,12 @@ static void loadWithoutAGoddamnRespring() {
 
 @dynamic layer;
 
-+ (Class)layerClass {
-
-	return [CAGradientLayer class];
-
-}
++ (Class)layerClass { return [CAGradientLayer class]; }
 
 @end
 
 
 // Aria Prysm
-
 
 @interface SpringBoard : UIApplication
 @end
@@ -149,14 +101,7 @@ static void loadWithoutAGoddamnRespring() {
 @end
 
 
-@interface NSDistributedNotificationCenter : NSNotificationCenter
-+ (instancetype)defaultCenter;
-- (void)postNotificationName:(NSString *)name object:(NSString *)object userInfo:(NSDictionary *)userInfo;
-@end
-
-
 // Aria Stock
-
 
 @interface MTMaterialView : UIView
 @property (assign, nonatomic) BOOL shouldCrossfade;
@@ -164,11 +109,11 @@ static void loadWithoutAGoddamnRespring() {
 
 
 @interface CCUIModularControlCenterOverlayViewController : UIViewController
-@property (nonatomic, strong) MTMaterialView *overlayBackgroundView;
 @property (nonatomic, strong) UIImageView *ariaImageView;
-@property (nonatomic, strong) AriaGradientView *gradientView;
+@property (nonatomic, strong) AriaGradientView *ariaGradientView;
+@property (nonatomic, strong) MTMaterialView *overlayBackgroundView;
 - (void)unleashAriaImage;
-- (void)setAriaGradient;
+- (void)unleashAriaGradients;
 @end
 
 

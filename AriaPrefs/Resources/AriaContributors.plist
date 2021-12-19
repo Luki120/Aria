@@ -26,7 +26,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Help with the transition &amp; Prysm Light/Dark Mode</string>
+			<string>Help with the transition</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -44,7 +44,7 @@
 			<key>cell</key>
 			<string>PSGroupCell</string>
 			<key>label</key>
-			<string>Epic Blur</string>
+			<string>Backdrop Blur</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -72,9 +72,9 @@
 			<key>accountLabel</key>
 			<string>Ben</string>
 			<key>account</key>
-			<string>BenOwl3</string>
+			<string>Ben216k</string>
 			<key>URL</key>
-			<string>https://avatars.githubusercontent.com/u/65474198?v=4</string>
+			<string>https://avatars.githubusercontent.com/u/91443760?v=4</string>
 		</dict>
 		<dict>
 			<key>cell</key>
