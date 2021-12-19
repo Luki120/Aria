@@ -11,7 +11,7 @@
 			<key>detail</key>
 			<string>AriaRootVC</string>
 			<key>icon</key>
-			<string>icon.png</string>
+			<string>Assets/Aria.png</string>
 			<key>isController</key>
 			<true />
 			<key>label</key>
