@@ -206,7 +206,6 @@ static void postNSNotification() {
 
 	}
 
-
 	if([key isEqualToString:@"prysmGradients"]) {
 
 		if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
@@ -295,16 +294,13 @@ static void postNSNotification() {
 
 		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"DarkImage"], self.savedSpecifiers[@"LightImage"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"BlurSlider"], self.savedSpecifiers[@"GaussianGroupCell"], self.savedSpecifiers[@"GaussianBlurButton"]] animated:NO];
 
-
 	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell1"]])
 
 		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"DarkImage"], self.savedSpecifiers[@"LightImage"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"BlurSlider"], self.savedSpecifiers[@"GaussianGroupCell"], self.savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:NO];
 
-
 	if(![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue])
 
 		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell3"], self.savedSpecifiers[@"AnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell4"], self.savedSpecifiers[@"GFirstColor"], self.savedSpecifiers[@"GSecondColor"], self.savedSpecifiers[@"GroupCell5"], self.savedSpecifiers[@"GradientDirections"]] animated:NO];
-
 
 	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell3"]])
 
