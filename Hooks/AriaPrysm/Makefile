@@ -1,6 +1,6 @@
 TWEAK_NAME = AriaPrysm
 
-AriaPrysm_FILES = AriaPrysm.m ../../Managers/AriaImageManager.m ../../Managers/MyClass.m
+AriaPrysm_FILES = AriaPrysm.m ../../Managers/AriaImageManager.m ../../Managers/MyClass.m ../../Views/AriaBlurView.m ../../Views/AriaGradientView.m
 AriaPrysm_CFLAGS = -fobjc-arc
 AriaPrysm_LIBRARIES = gcuniversal
 
