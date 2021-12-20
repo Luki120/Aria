@@ -22,16 +22,16 @@
 
 	if(self) {
 
-		if(!self.blurView) {
+		if(!blurView) {
 
 			_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
 
-			self.blurView = [[AriaBlurView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
-			self.blurView.tag = 120;
-			if(kIsPrysm) self.blurView.alpha = prysmAlpha;
-			else self.blurView.alpha = alpha;
-			self.blurView._blurQuality = @"high";
-			self.blurView.blurRadiusSetOnce = NO;
+			blurView = [[AriaBlurView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
+			blurView.tag = 120;
+			if(kIsPrysm) blurView.alpha = prysmAlpha;
+			else blurView.alpha = alpha;
+			blurView._blurQuality = @"high";
+			blurView.blurRadiusSetOnce = NO;
 
 		}
 

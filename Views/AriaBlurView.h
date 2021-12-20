@@ -16,8 +16,11 @@
 @end
 
 
-@interface AriaBlurView : _UIBackdropView
-@property (nonatomic, strong) AriaBlurView *blurView;
+@interface AriaBlurView : _UIBackdropView {
+
+	@public AriaBlurView *blurView;
+
+}
 + (AriaBlurView *)sharedInstance;
 + (instancetype)alloc __attribute__((unavailable("alloc not available, call sharedInstance instead")));
 - (instancetype)copy __attribute__((unavailable("copy not available, call sharedInstance instead")));

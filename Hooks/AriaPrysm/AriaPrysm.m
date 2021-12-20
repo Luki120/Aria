@@ -8,7 +8,7 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 	if(prysmGradients) return;
 
 	[[self.view viewWithTag:10000] removeFromSuperview];
-	[[[AriaBlurView sharedInstance].blurView viewWithTag:120] removeFromSuperview];
+	[[[AriaBlurView sharedInstance]->blurView viewWithTag:120] removeFromSuperview];
 
 	self.overlayView.hidden = NO;
 	self.backdropView.hidden = NO;
@@ -33,8 +33,8 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	} completion:nil];
 
-	[AriaBlurView sharedInstance].blurView.alpha = prysmAlpha;
-	[prysmImageView addSubview:[AriaBlurView sharedInstance].blurView];
+	[AriaBlurView sharedInstance]->blurView.alpha = prysmAlpha;
+	[prysmImageView addSubview:[AriaBlurView sharedInstance]->blurView];
 
 }
 

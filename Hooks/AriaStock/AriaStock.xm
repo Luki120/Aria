@@ -38,7 +38,7 @@
 	if(giveMeTheImage) {
 
 		self.ariaImageView.alpha = state.clampedPresentationProgress;
-		[AriaBlurView sharedInstance].blurView.alpha = state.clampedPresentationProgress * alpha;
+		[AriaBlurView sharedInstance]->blurView.alpha = state.clampedPresentationProgress * alpha;
 
 	}
 
@@ -53,7 +53,7 @@
 
 	loadWithoutAGoddamnRespring();
 
-	[[[AriaBlurView sharedInstance].blurView viewWithTag:120] removeFromSuperview];
+	[[[AriaBlurView sharedInstance]->blurView viewWithTag:120] removeFromSuperview];
 
 	if(!giveMeTheImage) return;
 
@@ -80,7 +80,7 @@
 
 	} completion:nil];
 
-	[self.overlayBackgroundView insertSubview:[AriaBlurView sharedInstance].blurView atIndex:1];
+	[self.overlayBackgroundView insertSubview:[AriaBlurView sharedInstance]->blurView atIndex:1];
 
 }
 
