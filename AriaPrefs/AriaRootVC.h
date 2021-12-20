@@ -19,12 +19,10 @@
 
 
 @interface AriaPrysmVC : PSListController
-@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 
 @interface AriaStockVC : PSListController
-@property (nonatomic, strong) NSMutableDictionary *savedSpecifiers;
 @end
 
 

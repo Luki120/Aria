@@ -72,7 +72,11 @@
 @end
 
 
-@implementation AriaPrysmVC
+@implementation AriaPrysmVC {
+
+	NSMutableDictionary *savedSpecifiers;
+
+}
 
 
 - (NSArray *)specifiers {
@@ -100,13 +104,13 @@
 
 		];
 
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
+		savedSpecifiers = (savedSpecifiers) ?: [NSMutableDictionary new];
 
 		for(PSSpecifier *specifier in _specifiers)
 
 			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
+				[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	}
 
@@ -145,19 +149,19 @@
 
 	if(![[self readPreferenceValue:[self specifierForID:@"PrysmSwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlurSlider"], self.savedSpecifiers[@"PRYGaussianGroupCell"], self.savedSpecifiers[@"PRYGaussianBlurButton"]] animated:NO];
+		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] animated:NO];
 
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
+	else if(![self containsSpecifier:savedSpecifiers[@"GroupCell-1"]])
 
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlurSlider"], self.savedSpecifiers[@"PRYGaussianGroupCell"], self.savedSpecifiers[@"PRYGaussianBlurButton"]] afterSpecifierID:@"PrysmSwitch" animated:NO];
+		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] afterSpecifierID:@"PrysmSwitch" animated:NO];
 
 	if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] animated:NO];
+		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] animated:NO];
 
 	else if(![self containsSpecifier:[self specifierForID:@"GroupCell-3"]])
 
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:NO];
+		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:NO];
 
 }
 
@@ -198,11 +202,11 @@ static void postNSNotification() {
 
 		if(![[self readPreferenceValue:[self specifierForID:@"PrysmSwitch"]] boolValue])
 
-			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlurSlider"], self.savedSpecifiers[@"PRYGaussianGroupCell"], self.savedSpecifiers[@"PRYGaussianBlurButton"]] animated:YES];
+			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] animated:YES];
 
-		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell-1"]])
+		else if(![self containsSpecifier:savedSpecifiers[@"GroupCell-1"]])
 
-			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-1"], self.savedSpecifiers[@"DarkPrysmImage"], self.savedSpecifiers[@"LightPrysmImage"], self.savedSpecifiers[@"GroupCell-2"], self.savedSpecifiers[@"PrysmBlurSlider"], self.savedSpecifiers[@"PRYGaussianGroupCell"], self.savedSpecifiers[@"PRYGaussianBlurButton"]] afterSpecifierID:@"PrysmSwitch" animated:YES];
+			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] afterSpecifierID:@"PrysmSwitch" animated:YES];
 
 	}
 
@@ -210,11 +214,11 @@ static void postNSNotification() {
 
 		if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
 
-			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] animated:YES];
+			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] animated:YES];
 
 		else if(![self containsSpecifier:[self specifierForID:@"GroupCell-3"]])
 
-			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell-3"], self.savedSpecifiers[@"PRYAnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell-4"], self.savedSpecifiers[@"PRYGFirstColor"], self.savedSpecifiers[@"PRYGSecondColor"], self.savedSpecifiers[@"GroupCell-5"], self.savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:YES];
+			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:YES];
 
 	}
 
@@ -224,7 +228,11 @@ static void postNSNotification() {
 @end
 
 
-@implementation AriaStockVC
+@implementation AriaStockVC {
+
+	NSMutableDictionary *savedSpecifiers;
+
+}
 
 
 - (NSArray *)specifiers {
@@ -252,13 +260,13 @@ static void postNSNotification() {
 
 		];
 
-		self.savedSpecifiers = (self.savedSpecifiers) ?: [NSMutableDictionary new];
+		savedSpecifiers = (savedSpecifiers) ?: [NSMutableDictionary new];
 
 		for(PSSpecifier *specifier in _specifiers)
 
 			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-				[self.savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
+				[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	}
 
@@ -292,19 +300,19 @@ static void postNSNotification() {
 
 	if(![[self readPreferenceValue:[self specifierForID:@"ImageSwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"DarkImage"], self.savedSpecifiers[@"LightImage"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"BlurSlider"], self.savedSpecifiers[@"GaussianGroupCell"], self.savedSpecifiers[@"GaussianBlurButton"]] animated:NO];
+		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] animated:NO];
 
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell1"]])
+	else if(![self containsSpecifier:savedSpecifiers[@"GroupCell1"]])
 
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"DarkImage"], self.savedSpecifiers[@"LightImage"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"BlurSlider"], self.savedSpecifiers[@"GaussianGroupCell"], self.savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:NO];
+		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:NO];
 
 	if(![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue])
 
-		[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell3"], self.savedSpecifiers[@"AnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell4"], self.savedSpecifiers[@"GFirstColor"], self.savedSpecifiers[@"GSecondColor"], self.savedSpecifiers[@"GroupCell5"], self.savedSpecifiers[@"GradientDirections"]] animated:NO];
+		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] animated:NO];
 
-	else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell3"]])
+	else if(![self containsSpecifier:savedSpecifiers[@"GroupCell3"]])
 
-		[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell3"], self.savedSpecifiers[@"AnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell4"], self.savedSpecifiers[@"GFirstColor"], self.savedSpecifiers[@"GSecondColor"], self.savedSpecifiers[@"GroupCell5"], self.savedSpecifiers[@"GradientDirections"]] afterSpecifierID:@"GradientSwitch" animated:NO];
+		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] afterSpecifierID:@"GradientSwitch" animated:NO];
 
 }
 
@@ -364,11 +372,11 @@ static void postNSNotification() {
 
 		if(![value boolValue])
 
-			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"DarkImage"], self.savedSpecifiers[@"LightImage"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"BlurSlider"], self.savedSpecifiers[@"GaussianGroupCell"], self.savedSpecifiers[@"GaussianBlurButton"]] animated:YES];
+			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] animated:YES];
 
-		else if(![self containsSpecifier:self.savedSpecifiers[@"GroupCell1"]])
+		else if(![self containsSpecifier:savedSpecifiers[@"GroupCell1"]])
 
-			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell1"], self.savedSpecifiers[@"DarkImage"], self.savedSpecifiers[@"LightImage"], self.savedSpecifiers[@"GroupCell2"], self.savedSpecifiers[@"BlurSlider"], self.savedSpecifiers[@"GaussianGroupCell"], self.savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:YES];
+			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:YES];
 
 	}
 
@@ -376,11 +384,11 @@ static void postNSNotification() {
 
 		if(![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue])
 
-			[self removeContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell3"], self.savedSpecifiers[@"AnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell4"], self.savedSpecifiers[@"GFirstColor"], self.savedSpecifiers[@"GSecondColor"], self.savedSpecifiers[@"GroupCell5"], self.savedSpecifiers[@"GradientDirections"]] animated:YES];
+			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] animated:YES];
 
-		else if (![self containsSpecifier:self.savedSpecifiers[@"GroupCell3"]])
+		else if (![self containsSpecifier:savedSpecifiers[@"GroupCell3"]])
 
-			[self insertContiguousSpecifiers:@[self.savedSpecifiers[@"GroupCell3"], self.savedSpecifiers[@"AnimateGradientSwitch"], self.savedSpecifiers[@"GroupCell4"], self.savedSpecifiers[@"GFirstColor"], self.savedSpecifiers[@"GSecondColor"], self.savedSpecifiers[@"GroupCell5"], self.savedSpecifiers[@"GradientDirections"]] afterSpecifierID:@"GradientSwitch" animated:YES];
+			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] afterSpecifierID:@"GradientSwitch" animated:YES];
 
 	}
 
