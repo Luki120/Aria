@@ -7,16 +7,16 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	if(prysmGradients) return;
 
-	[[self.view viewWithTag:10000] removeFromSuperview];
-	[[[AriaBlurView sharedInstance]->blurView viewWithTag:120] removeFromSuperview];
+	[[self.view viewWithTag: 10000] removeFromSuperview];
+	[[[AriaBlurView sharedInstance]->blurView viewWithTag: 120] removeFromSuperview];
 
 	self.overlayView.hidden = NO;
 	self.backdropView.hidden = NO;
 
 	if(!isPrysmImage) return;
 
-	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"prysmDarkImage"];
-	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"prysmLightImage"];
+	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmDarkImage];
+	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmLightImage];
 
 	self.overlayView.hidden = YES;
 	self.backdropView.hidden = YES;
@@ -51,8 +51,8 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	if(!prysmGradients) return;
 
-	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:@"prysmGradientFirstColor" fallback:@"ffffff"];
-	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:@"prysmGradientSecondColor" fallback:@"ffffff"];
+	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kPrysmGradientFirstColor fallback:@"ffffff"];
+	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kPrysmGradientSecondColor fallback:@"ffffff"];
 	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 
 	self.overlayView.hidden = YES;

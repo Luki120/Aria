@@ -27,10 +27,10 @@
 
 - (void)blurImageWithImage {
 
-	UIImage *stockDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"stockDarkImage"];
-	UIImage *stockLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"stockLightImage"];
-	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"prysmDarkImage"];
-	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"prysmLightImage"];
+	UIImage *stockDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kStockDarkImage];
+	UIImage *stockLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kStockLightImage];
+	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmDarkImage];
+	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmLightImage];
 
 	UIImage *candidateImage;
 

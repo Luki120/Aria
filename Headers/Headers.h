@@ -37,3 +37,7 @@
 @interface CCUIOverlayTransitionState : NSObject
 @property (assign, nonatomic, readonly) CGFloat clampedPresentationProgress;
 @end
+
+
+@interface NSDistributedNotificationCenter : NSNotificationCenter
+@end

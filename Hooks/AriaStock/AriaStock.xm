@@ -53,12 +53,12 @@
 
 	loadWithoutAGoddamnRespring();
 
-	[[[AriaBlurView sharedInstance]->blurView viewWithTag:120] removeFromSuperview];
+	[[[AriaBlurView sharedInstance]->blurView viewWithTag: 120] removeFromSuperview];
 
 	if(!giveMeTheImage) return;
 
-	UIImage *stockDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"stockDarkImage"];
-	UIImage *stockLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey:@"stockLightImage"];
+	UIImage *stockDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kStockDarkImage];
+	UIImage *stockLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kStockLightImage];
 
 	if(!self.ariaImageView) {
 
@@ -95,8 +95,8 @@
 
 	if(!giveMeThoseGradients) return;
 
-	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:@"gradientFirstColor" fallback:@"ffffff"];
-	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:@"gradientSecondColor" fallback:@"ffffff"];
+	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kStockGradientFirstColor fallback:@"ffffff"];
+	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kStockGradientSecondColor fallback:@"ffffff"];
 	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 
 	self.ariaGradientView = [[AriaGradientView alloc] initWithFrame:self.view.bounds];

@@ -336,7 +336,7 @@ static void postNSNotification() {
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The options you enable here will only inject if you either don't have Prysm installed or disabled it only with iCleaner Pro." preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The options you enable here won't inject unless you either disable Prysm (with iCleaner Pro) or you uninstall it." preferredStyle:UIAlertControllerStyleAlert];
 
 	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Gotcha" style:UIAlertActionStyleCancel handler:nil];
 
