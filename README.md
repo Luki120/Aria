@@ -1,25 +1,27 @@
 # Aria
 
-![download](https://media.giphy.com/media/Vukjx1jPP6vi6lxByn/giphy.gif)
+![Aria gif](https://media.giphy.com/media/Vukjx1jPP6vi6lxByn/giphy.gif)
 
 ## On the fly preferences.
 
 ## Features
 
-* Custom Dark Mode image.
-* Custom Light Mode image.
-* Epic Blur (Gaussian) & custom intensity.
+* Custom dark mode image.
+* Custom light mode image.
+* Epic blur with custom intensity.
+* Gaussian blur with custom intensity.
 * Gradients with custom directions & optional animation.
 
 
 ## Prysm Support
 
-* Custom Dark Mode image.
-* Custom Light Mode image.
-* Epic Blur (Gaussian) & custom intensity.
+* Custom dark mode image.
+* Custom light mode image.
+* Epic blur with custom intensity.
+* Gaussian blur with custom intensity.
 * Gradients with custom directions & optional animation.
 
-##  Socials
+## Socials
 
 * [Twitter](https://twitter.com/Lukii120)
 * [Support on Discord](https://discord.gg/2y5uWhhNJu)
