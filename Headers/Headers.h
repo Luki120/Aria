@@ -1,9 +1,6 @@
 #import <substrate.h>
-#import "Headers/Prefs.h"
 #import "Views/AriaBlurView.h"
 #import "Views/AriaGradientView.h"
-#import "Managers/AriaImageManager.h"
-#import <AudioToolbox/AudioServices.h>
 
 
 // Aria Prysm
@@ -36,8 +33,4 @@
 
 @interface CCUIOverlayTransitionState : NSObject
 @property (assign, nonatomic, readonly) CGFloat clampedPresentationProgress;
-@end
-
-
-@interface NSDistributedNotificationCenter : NSNotificationCenter
 @end

@@ -87,9 +87,6 @@
 - (void)saveImageToGallery:(UIImage *)image { kSaveToGallery(image, nil, nil, nil); }
 
 
-- (void)uselessMethodThatllNeverBeCalled { loadWithoutAGoddamnRespring(); }
-
-
 static void proudSuccessAlertController() {
 
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"Your fancy image got succesfully saved to your gallery, do you want to see how it looks?" preferredStyle:UIAlertControllerStyleAlert];
