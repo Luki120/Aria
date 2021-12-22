@@ -72,6 +72,10 @@
 @end
 
 
+@interface AriaPrysmVC () <AriaCustomButtonCellDelegate>
+@end
+
+
 @implementation AriaPrysmVC {
 
 	NSMutableDictionary *savedSpecifiers;
@@ -166,7 +170,19 @@
 }
 
 
-- (void)didTapSaveBlurredImageButton { [[AriaImageManager sharedInstance] blurImageWithImage]; }
+- (void)didTapGaussianBlurInfoButton {
+
+	AudioServicesPlaySystemSound(1521);
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can actually save the image you want with the blur applied, and with any intensity you want for it. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences, so I offer you the option to save the image you want instead and then you can come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
+
+	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleCancel handler:nil];
+
+	[alertController addAction: dismissAction];
+
+	[self presentViewController:alertController animated:YES completion: nil];
+
+}
 
 
 static void postNSNotification() {
@@ -225,6 +241,21 @@ static void postNSNotification() {
 }
 
 
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	AriaCustomButtonCell *cell = (AriaCustomButtonCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
+
+	if([cell isKindOfClass: AriaCustomButtonCell.class]) cell.delegate = self;
+
+	return cell;
+
+}
+
+
+@end
+
+
+@interface AriaStockVC () <AriaCustomButtonCellDelegate>
 @end
 
 
@@ -340,14 +371,26 @@ static void postNSNotification() {
 
 	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Gotcha" style:UIAlertActionStyleCancel handler:nil];
 
-	[alertController addAction:dismissAction];
+	[alertController addAction: dismissAction];
 
-	[self presentViewController:alertController animated:YES completion:nil];
+	[self presentViewController:alertController animated:YES completion: nil];
 
 }
 
 
-- (void)didTapSaveBlurredImageButton { [[AriaImageManager sharedInstance] blurImageWithImage]; }
+- (void)didTapGaussianBlurInfoButton {
+
+	AudioServicesPlaySystemSound(1521);
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can actually save the image you want with the blur applied, and with any intensity you want for it. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences, so I offer you the option to save the image you want instead and then you can come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
+
+	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleCancel handler:nil];
+
+	[alertController addAction: dismissAction];
+
+	[self presentViewController:alertController animated:YES completion: nil];
+
+}
 
 
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
@@ -395,7 +438,15 @@ static void postNSNotification() {
 }
 
 
-- (void)uselessMethodThatllNeverBeCalled { loadWithoutAGoddamnRespring(); }
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	AriaCustomButtonCell *cell = (AriaCustomButtonCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
+
+	if([cell isKindOfClass: AriaCustomButtonCell.class]) cell.delegate = self;
+
+	return cell;
+
+}
 
 
 @end
