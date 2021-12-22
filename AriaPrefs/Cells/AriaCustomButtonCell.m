@@ -3,7 +3,7 @@
 
 @implementation AriaCustomButtonCell {
 
-	UILabel *gaussianBlurLabel;
+	UIButton *gaussianBlurButton;
 	UIButton *gaussianBlurInfoButton;
 
 }
@@ -13,7 +13,7 @@
 
 	self = [super initWithStyle:style reuseIdentifier:identifier specifier:specifier];
 
-	[self setupUI];
+	if(self) [self setupUI];
 
 	return self;
 
@@ -22,17 +22,13 @@
 
 - (void)setupUI {
 
-	gaussianBlurLabel = [UILabel new];
-	gaussianBlurLabel.font = [UIFont systemFontOfSize: 17];
-	gaussianBlurLabel.text = @"Gaussian Blur";
-	gaussianBlurLabel.textColor = UIColor.labelColor;
-	gaussianBlurLabel.userInteractionEnabled = YES;
-	gaussianBlurLabel.translatesAutoresizingMaskIntoConstraints = NO;
-	[self.contentView addSubview: gaussianBlurLabel];
-
-	UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didTapLabel)];
-	tapGesture.numberOfTapsRequired = 1;
-	[gaussianBlurLabel addGestureRecognizer: tapGesture];
+	gaussianBlurButton = [UIButton new];
+	gaussianBlurButton.titleLabel.font = [UIFont systemFontOfSize: 17];
+	gaussianBlurButton.translatesAutoresizingMaskIntoConstraints = NO;
+	[gaussianBlurButton setTitle : @"Gaussian Blur" forState: UIControlStateNormal];
+	[gaussianBlurButton setTitleColor : UIColor.labelColor forState: UIControlStateNormal];
+	[gaussianBlurButton addTarget : self action:@selector(didTapBlurButton) forControlEvents: UIControlEventTouchUpInside];
+	[self.contentView addSubview: gaussianBlurButton];
 
 	UIImage *buttonImage = [UIImage systemImageNamed: @"info.circle"];
 
@@ -40,7 +36,7 @@
 	gaussianBlurInfoButton.tintColor = kAriaTintColor;
 	gaussianBlurInfoButton.translatesAutoresizingMaskIntoConstraints = NO;
 	[gaussianBlurInfoButton setImage : buttonImage forState: UIControlStateNormal];
-	[gaussianBlurInfoButton addTarget : self action:@selector(didTapButton) forControlEvents: UIControlEventTouchUpInside];
+	[gaussianBlurInfoButton addTarget : self action:@selector(didTapInfoButton) forControlEvents: UIControlEventTouchUpInside];
 	[self.contentView addSubview: gaussianBlurInfoButton];
 
 	[self activateConstraints];
@@ -50,8 +46,8 @@
 
 - (void)activateConstraints {
 
-	[gaussianBlurLabel.centerYAnchor constraintEqualToAnchor : self.contentView.centerYAnchor].active = YES;
-	[gaussianBlurLabel.leadingAnchor constraintEqualToAnchor : self.contentView.leadingAnchor constant : 15].active = YES;
+	[gaussianBlurButton.centerYAnchor constraintEqualToAnchor : self.contentView.centerYAnchor].active = YES;
+	[gaussianBlurButton.leadingAnchor constraintEqualToAnchor : self.contentView.leadingAnchor constant : 15].active = YES;
 
 	[gaussianBlurInfoButton.centerYAnchor constraintEqualToAnchor : self.contentView.centerYAnchor].active = YES;
 	[gaussianBlurInfoButton.trailingAnchor constraintEqualToAnchor : self.contentView.trailingAnchor constant : -20].active = YES;
@@ -59,14 +55,14 @@
 }
 
 
-- (void)didTapLabel {
+- (void)didTapBlurButton {
 
-	[[AriaImageManager sharedInstance] blurImageWithImage];
+	[self.delegate didTapGaussianBlurButton];
 
 }
 
 
-- (void)didTapButton {
+- (void)didTapInfoButton {
 
 	[self.delegate didTapGaussianBlurInfoButton];
 

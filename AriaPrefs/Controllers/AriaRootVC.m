@@ -170,11 +170,18 @@
 }
 
 
+- (void)didTapGaussianBlurButton {
+
+	[[AriaImageManager sharedInstance] blurImageWithImage];
+
+}
+
+
 - (void)didTapGaussianBlurInfoButton {
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can actually save the image you want with the blur applied, and with any intensity you want for it. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences, so I offer you the option to save the image you want instead and then you can come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
 
 	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleCancel handler:nil];
 
@@ -355,7 +362,7 @@ static void postNSNotification() {
 	UIButton *infoButton =  [UIButton buttonWithType:UIButtonTypeCustom];
 	infoButton.tintColor = kAriaTintColor;
 	[infoButton setImage : buttonImage forState:UIControlStateNormal];
-	[infoButton addTarget : self action:@selector(didTapInfoButton) forControlEvents:UIControlEventTouchUpInside];
+	[infoButton addTarget : self action:@selector(didTapNavBarInfoButton) forControlEvents:UIControlEventTouchUpInside];
 
 	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
 	self.navigationItem.rightBarButtonItem = changelogButtonItem;
@@ -363,7 +370,7 @@ static void postNSNotification() {
 }
 
 
-- (void)didTapInfoButton {
+- (void)didTapNavBarInfoButton {
 
 	AudioServicesPlaySystemSound(1521);
 
@@ -378,11 +385,18 @@ static void postNSNotification() {
 }
 
 
+- (void)didTapGaussianBlurButton {
+
+	[[AriaImageManager sharedInstance] blurImageWithImage];
+
+}
+
+
 - (void)didTapGaussianBlurInfoButton {
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can actually save the image you want with the blur applied, and with any intensity you want for it. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences, so I offer you the option to save the image you want instead and then you can come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
 
 	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleCancel handler:nil];
 

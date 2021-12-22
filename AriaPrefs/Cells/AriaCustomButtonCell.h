@@ -5,6 +5,7 @@
 
 @protocol AriaCustomButtonCellDelegate <NSObject>
 
+@required - (void)didTapGaussianBlurButton;
 @required - (void)didTapGaussianBlurInfoButton;
 
 @end
@@ -12,5 +13,4 @@
 
 @interface AriaCustomButtonCell : PSTableCell
 @property (nonatomic, weak) id <AriaCustomButtonCellDelegate> delegate;
-- (void)didTapButton;
 @end
