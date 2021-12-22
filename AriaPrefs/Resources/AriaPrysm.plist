@@ -102,13 +102,9 @@
 			</dict>
 			<dict>
 				<key>cell</key>
-				<string>PSButtonCell</string>
+				<string>PSStaticTextCell</string>
 				<key>cellClass</key>
-				<string>AriaTintCell</string>
-				<key>action</key>
-				<string>didTapSaveBlurredImageButton</string>
-				<key>label</key>
-				<string>Gaussian Blur</string>
+				<string>AriaCustomButtonCell</string>
 				<key>id</key>
 				<string>PRYGaussianBlurButton</string>
 			</dict>
