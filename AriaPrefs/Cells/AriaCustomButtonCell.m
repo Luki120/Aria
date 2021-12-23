@@ -30,7 +30,8 @@
 	[gaussianBlurButton addTarget : self action:@selector(didTapBlurButton) forControlEvents: UIControlEventTouchUpInside];
 	[self.contentView addSubview: gaussianBlurButton];
 
-	UIImage *buttonImage = [UIImage systemImageNamed: @"info.circle"];
+	UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration configurationWithPointSize: 20];
+	UIImage *buttonImage = [UIImage systemImageNamed: @"info.circle" withConfiguration: configuration];
 
 	gaussianBlurInfoButton = [UIButton new];
 	gaussianBlurInfoButton.tintColor = kAriaTintColor;
