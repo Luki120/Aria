@@ -190,6 +190,8 @@ static void postNSNotification() {
 	[settings setObject:value forKey:specifier.properties[@"key"]];	
 	[settings writeToFile:kPATH atomically:YES];
 
+	[super setPreferenceValue:value specifier:specifier];
+
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmImageApplied" object:nil];
 	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmGradientsApplied" object:nil];
 
@@ -359,6 +361,8 @@ static void postNSNotification() {
 	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPATH]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];	
 	[settings writeToFile:kPATH atomically:YES];
+
+	[super setPreferenceValue:value specifier:specifier];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 

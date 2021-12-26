@@ -160,7 +160,7 @@
 				<key>label</key>
 				<string>First Color</string>
 				<key>defaults</key>
-				<string>me.luki.ariaprefscolors</string>
+				<string>me.luki.ariaprefs</string>
 				<key>PostNotification</key>
 				<string>me.luki.ariaprefs/prysmGradientColorsChanged</string>
 				<key>id</key>
@@ -180,7 +180,7 @@
 				<key>label</key>
 				<string>Second Color</string>
 				<key>defaults</key>
-				<string>me.luki.ariaprefscolors</string>
+				<string>me.luki.ariaprefs</string>
 				<key>PostNotification</key>
 				<string>me.luki.ariaprefs/prysmGradientColorsChanged</string>
 				<key>id</key>
