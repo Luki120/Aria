@@ -60,7 +60,7 @@
 
 		UIImage *blurredImage = [[UIImage alloc] initWithCGImage: cgImage scale: candidateImage.scale orientation: UIImageOrientationUp];
 
-		[[AriaImageManager sharedInstance] saveImageToGallery: blurredImage];
+		[self saveImageToGallery: blurredImage];
 		CGImageRelease(cgImage);
 
 		proudSuccessAlertController();
