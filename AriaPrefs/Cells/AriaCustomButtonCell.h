@@ -1,4 +1,4 @@
-#import "Constants/Constants.h"
+#import "Headers/Constants.h"
 #import "Managers/AriaImageManager.h"
 #import <Preferences/PSTableCell.h>
 

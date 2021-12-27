@@ -1,5 +1,5 @@
 #import "Managers/MyClass.h"
-#import "Constants/Constants.h"
+#import "Headers/Constants.h"
 
 
 @interface AriaImageManager : NSObject

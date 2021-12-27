@@ -1,8 +1,7 @@
 @import UIKit;
 #import "Headers/Prefs.h"
 #import "Headers/Common.h"
-#import "Constants/Constants.h"
-
+#import "Headers/Constants.h"
 
 
 @interface AriaBlurView : _UIBackdropView {
