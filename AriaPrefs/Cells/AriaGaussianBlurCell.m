@@ -1,7 +1,7 @@
-#import "AriaCustomButtonCell.h"
+#import "AriaGaussianBlurCell.h"
 
 
-@implementation AriaCustomButtonCell {
+@implementation AriaGaussianBlurCell {
 
 	UIButton *gaussianBlurButton;
 	UIButton *gaussianBlurInfoButton;

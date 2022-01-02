@@ -3,7 +3,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import <Preferences/PSListController.h>
 #import "Headers/Common.h"
-#import "../Cells/AriaCustomButtonCell.h"
+#import "../Cells/AriaGaussianBlurCell.h"
 
 
 @interface PSListController (Private)

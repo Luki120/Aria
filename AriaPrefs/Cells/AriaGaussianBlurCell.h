@@ -3,7 +3,7 @@
 #import <Preferences/PSTableCell.h>
 
 
-@protocol AriaCustomButtonCellDelegate <NSObject>
+@protocol AriaGaussianBlurCellDelegate <NSObject>
 
 @required - (void)didTapGaussianBlurButton;
 @required - (void)didTapGaussianBlurInfoButton;
@@ -11,6 +11,6 @@
 @end
 
 
-@interface AriaCustomButtonCell : PSTableCell
-@property (nonatomic, weak) id <AriaCustomButtonCellDelegate> delegate;
+@interface AriaGaussianBlurCell : PSTableCell
+@property (nonatomic, weak) id <AriaGaussianBlurCellDelegate> delegate;
 @end

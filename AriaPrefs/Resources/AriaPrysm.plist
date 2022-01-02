@@ -104,7 +104,7 @@
 				<key>cell</key>
 				<string>PSStaticTextCell</string>
 				<key>cellClass</key>
-				<string>AriaCustomButtonCell</string>
+				<string>AriaGaussianBlurCell</string>
 				<key>id</key>
 				<string>PRYGaussianBlurButton</string>
 			</dict>

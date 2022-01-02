@@ -396,13 +396,13 @@ static void postNSNotification() {
 @end
 
 
-#pragma mark AriaCustomButtonCellDelegate
+#pragma mark AriaGaussianBlurCellDelegate
 
-@interface AriaPrysmVC (Delegate) <AriaCustomButtonCellDelegate>
+@interface AriaPrysmVC (Delegate) <AriaGaussianBlurCellDelegate>
 @end
 
 
-@interface AriaStockVC (Delegate) <AriaCustomButtonCellDelegate>
+@interface AriaStockVC (Delegate) <AriaGaussianBlurCellDelegate>
 @end
 
 
@@ -411,9 +411,9 @@ static void postNSNotification() {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	AriaCustomButtonCell *cell = (AriaCustomButtonCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
+	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
 
-	if([cell isKindOfClass: AriaCustomButtonCell.class]) cell.delegate = self;
+	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
 
 	return cell;
 
@@ -450,9 +450,9 @@ static void postNSNotification() {
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-	AriaCustomButtonCell *cell = (AriaCustomButtonCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
+	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
 
-	if([cell isKindOfClass: AriaCustomButtonCell.class]) cell.delegate = self;
+	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
 
 	return cell;
 
