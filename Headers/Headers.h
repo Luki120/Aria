@@ -15,6 +15,11 @@
 @end
 
 
+UIImage *prysmDarkImage;
+UIImage *prysmLightImage;
+UIImageView *prysmImageView;
+
+
 // Aria Stock
 
 @interface MTMaterialView : UIView

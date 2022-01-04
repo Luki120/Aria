@@ -1,7 +1,7 @@
 #import "Headers/Headers.h"
 
 
-void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
+static void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	loadWithoutAGoddamnRespring();
 
@@ -15,17 +15,25 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	if(!isPrysmImage) return;
 
-	UIImage *prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmDarkImage];
-	UIImage *prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmLightImage];
+	prysmDarkImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmDarkImage];
+	prysmLightImage = [GcImagePickerUtils imageFromDefaults:kDefaults withKey: kPrysmLightImage];
 
 	self.overlayView.hidden = YES;
 	self.backdropView.hidden = YES;
 
-	UIImageView *prysmImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+	prysmImageView = [[UIImageView alloc] initWithFrame:self.view.bounds];
 	prysmImageView.tag = 10000;
+	prysmImageView.image = kUserInterfaceStyle ? prysmDarkImage : prysmLightImage;
 	prysmImageView.contentMode = UIViewContentModeScaleAspectFill;
 	prysmImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	[self.view insertSubview:prysmImageView atIndex:0];
+
+	[AriaBlurView sharedInstance]->blurView.alpha = prysmAlpha;
+	[prysmImageView addSubview:[AriaBlurView sharedInstance]->blurView];
+
+}
+
+static void new_updatePrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	[UIView transitionWithView:self.view duration:0.8 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
@@ -33,12 +41,9 @@ void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	} completion:nil];
 
-	[AriaBlurView sharedInstance]->blurView.alpha = prysmAlpha;
-	[prysmImageView addSubview:[AriaBlurView sharedInstance]->blurView];
-
 }
 
-void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
+static void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	loadWithoutAGoddamnRespring();
 
@@ -133,9 +138,9 @@ void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 }
 
-void (*origTCDC)(UIScreen *self, SEL _cmd, id previousTrait);
+static void (*origTCDC)(UIScreen *self, SEL _cmd, id previousTrait);
 
-void overrideTCDC(UIScreen *self, SEL _cmd, id previousTrait) {
+static void overrideTCDC(UIScreen *self, SEL _cmd, id previousTrait) {
 
 	origTCDC(self, _cmd, previousTrait);
 
@@ -143,9 +148,9 @@ void overrideTCDC(UIScreen *self, SEL _cmd, id previousTrait) {
 
 }
 
-void (*origVDLS)(PrysmCardBackgroundViewController *self, SEL _cmd);
+static void (*origVDLS)(PrysmCardBackgroundViewController *self, SEL _cmd);
 
-void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create notifications observers
+static void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create notifications observers
 
 	origVDLS(self, _cmd);
 
@@ -157,13 +162,13 @@ void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"prysmImageApplied" object:nil];
 	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmGradient) name:@"prysmGradientsApplied" object:nil];
 
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"traitCollectionDidChange" object:nil];
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updatePrysmImage) name:@"traitCollectionDidChange" object:nil];
 
 }
 
-void(*origADFL)(SpringBoard *self, SEL _cmd, id app);
+static void(*origADFL)(SpringBoard *self, SEL _cmd, id app);
 
-void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
+static void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 
 	origADFL(self, _cmd, app);
 
@@ -177,6 +182,15 @@ void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
 		Class(@"PrysmCardBackgroundViewController"),
 		@selector(setPrysmImage),
 		(IMP)&new_setPrysmImage,
+		"v@:"
+
+	);
+
+	class_addMethod (
+
+		Class(@"PrysmCardBackgroundViewController"),
+		@selector(updatePrysmImage),
+		(IMP)&new_updatePrysmImage,
 		"v@:"
 
 	);
