@@ -1,5 +1,5 @@
 export ARCHS = arm64 arm64e
-export TARGET := iphone:clang:latest:latest
+export TARGET := iphone:clang:14.4:13.0
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
