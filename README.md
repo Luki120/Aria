@@ -11,15 +11,7 @@
 * Epic blur with custom intensity.
 * Gaussian blur with custom intensity.
 * Gradients with custom directions & optional animation.
-
-
-## Prysm Support
-
-* Custom dark mode image.
-* Custom light mode image.
-* Epic blur with custom intensity.
-* Gaussian blur with custom intensity.
-* Gradients with custom directions & optional animation.
+* Prysm support.
 
 ## Socials
 
