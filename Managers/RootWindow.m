@@ -1,7 +1,7 @@
-#import "MyClass.h"
+#import "RootWindow.h"
 
 
-@implementation MyClass
+@implementation RootWindow
 
 
 + (UIWindow *)keyWindow {

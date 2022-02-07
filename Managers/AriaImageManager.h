@@ -1,5 +1,5 @@
-#import "Managers/MyClass.h"
 #import "Headers/Constants.h"
+#import "Managers/RootWindow.h"
 
 
 @interface AriaImageManager : NSObject
@@ -16,5 +16,5 @@
 // Private
 
 @interface UIApplication ()
-- (BOOL)_openURL:(id)url;
+- (BOOL)_openURL:(NSURL *)url;
 @end

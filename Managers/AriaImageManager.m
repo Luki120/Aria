@@ -79,7 +79,7 @@
 	[alertController addAction: confirmAction];
 	[alertController addAction: dismissAction];
 
-	[[MyClass keyWindow].rootViewController presentViewController:alertController animated:YES completion:nil];
+	[[RootWindow keyWindow].rootViewController presentViewController:alertController animated:YES completion:nil];
 
 }
 
@@ -104,7 +104,7 @@ static void proudSuccessAlertController() {
 	[alertController addAction: confirmAction];
 	[alertController addAction: cancelAction];
 
-	[[MyClass keyWindow].rootViewController presentViewController:alertController animated:YES completion:nil];
+	[[RootWindow keyWindow].rootViewController presentViewController:alertController animated:YES completion:nil];
 
 }
 
