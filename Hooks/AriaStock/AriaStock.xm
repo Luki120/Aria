@@ -1,4 +1,5 @@
 #import "Headers/Headers.h"
+#import "Headers/Prefs.h"
 
 
 %group AriaStock
@@ -14,6 +15,9 @@
 - (void)viewDidLoad { // create a notification observer to force proper dark/light mode in the CC
 
 	%orig;
+
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle: 2];
+	ariaBlurView = [[AriaBlurView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
 
 	[NSNotificationCenter.defaultCenter removeObserver:self];
 	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(unleashAriaImage) name:@"traitCollectionDidChange" object:nil];
@@ -36,10 +40,8 @@
 	%orig;
 
 	if(giveMeTheImage) {
-
 		self.ariaImageView.alpha = state.clampedPresentationProgress;
-		[AriaBlurView sharedInstance]->blurView.alpha = state.clampedPresentationProgress * alpha;
-
+		ariaBlurView.alpha = state.clampedPresentationProgress * alpha;
 	}
 
 	else if(giveMeThoseGradients) self.ariaGradientView.alpha = state.clampedPresentationProgress;
@@ -53,7 +55,7 @@
 
 	loadWithoutAGoddamnRespring();
 
-	[[[AriaBlurView sharedInstance]->blurView viewWithTag: 120] removeFromSuperview];
+	[[ariaBlurView viewWithTag: 120] removeFromSuperview];
 
 	if(!giveMeTheImage) return;
 
@@ -62,9 +64,10 @@
 
 	if(!self.ariaImageView) {
 
-		self.ariaImageView = [[UIImageView alloc] initWithFrame:self.overlayBackgroundView.bounds];
+		self.ariaImageView = [[UIImageView alloc] initWithFrame: self.overlayBackgroundView.bounds];
 		self.ariaImageView.alpha = MSHookIvar<CCUIOverlayTransitionState *>(self, "_previousTransitionState").clampedPresentationProgress;
 		self.ariaImageView.contentMode = UIViewContentModeScaleAspectFill;
+		self.ariaImageView.clipsToBounds = YES;
 		self.ariaImageView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 		[self.overlayBackgroundView insertSubview:self.ariaImageView atIndex:0];
 
@@ -80,7 +83,8 @@
 
 	} completion:nil];
 
-	[self.overlayBackgroundView insertSubview:[AriaBlurView sharedInstance]->blurView atIndex:1];
+	ariaBlurView.alpha = alpha;
+	[self.overlayBackgroundView insertSubview:ariaBlurView atIndex:1];
 
 }
 
@@ -91,7 +95,7 @@
 
 	loadWithoutAGoddamnRespring();
 
-	[[self.view viewWithTag:2811] removeFromSuperview];
+	[[self.view viewWithTag: 2811] removeFromSuperview];
 
 	if(!giveMeThoseGradients) return;
 
@@ -99,13 +103,12 @@
 	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kStockGradientSecondColor fallback:@"ffffff"];
 	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 
-	self.ariaGradientView = [[AriaGradientView alloc] initWithFrame:self.view.bounds];
+	self.ariaGradientView = [[AriaGradientView alloc] initWithFrame: self.view.bounds];
 	self.ariaGradientView.tag = 2811;
 	self.ariaGradientView.alpha = MSHookIvar<CCUIOverlayTransitionState *>(self, "_previousTransitionState").clampedPresentationProgress;
 	self.ariaGradientView.clipsToBounds = YES;
 	self.ariaGradientView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 	self.ariaGradientView.layer.colors = gradientColors;
-	self.ariaGradientView.layer.masksToBounds = YES;
 	[self.overlayBackgroundView insertSubview:self.ariaGradientView atIndex:0];
 
 	self.overlayBackgroundView.shouldCrossfade = YES;
@@ -114,51 +117,35 @@
 
 		case 1: // Top to Bottom
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0.5,0);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0.5,1);
-			break;
+			[self setGradientStartPoint:CGPointMake(0.5, 0) endPoint:CGPointMake(0.5, 1)]; break;
 
 		case 2: // Left to Right
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0,0.5);
-			self.ariaGradientView.layer.endPoint = CGPointMake(1,0.5);
-			break;
+			[self setGradientStartPoint:CGPointMake(0, 0.5) endPoint:CGPointMake(1, 0.5)]; break;
 
 		case 3: // Right to Left
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(1,0.5);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0,0.5);
-			break;
+			[self setGradientStartPoint:CGPointMake(1, 0.5) endPoint:CGPointMake(0, 0.5)]; break;
 
 		case 4: // Upper Left lower right
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0,0);
-			self.ariaGradientView.layer.endPoint = CGPointMake(1,1);
-			break;
+			[self setGradientStartPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 1)]; break;
 
 		case 5: // Lower left upper right
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0,1);
-			self.ariaGradientView.layer.endPoint = CGPointMake(1,0);
-			break;
+			[self setGradientStartPoint:CGPointMake(0, 1) endPoint:CGPointMake(1, 0)]; break;
 
 		case 6: // Upper right lower left
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(1,0);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0,1);
-			break;
+			[self setGradientStartPoint:CGPointMake(1, 0) endPoint:CGPointMake(0, 1)]; break;
 
 		case 7: // Lower right upper left
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(1,1);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0,0);
-			break;
+			[self setGradientStartPoint:CGPointMake(1, 1) endPoint:CGPointMake(0, 0)]; break;
 
 		default: // Bottom to Top
 
-			self.ariaGradientView.layer.startPoint = CGPointMake(0.5,1);
-			self.ariaGradientView.layer.endPoint = CGPointMake(0.5,0);
-			break;
+			[self setGradientStartPoint:CGPointMake(0.5, 1) endPoint:CGPointMake(0.5, 0)]; break;
 
 	}
 
@@ -166,15 +153,23 @@
 
 	CABasicAnimation *animation = [CABasicAnimation animation];
 	animation.keyPath = @"colors";
-	animation.fillMode = kCAFillModeBoth;
 	animation.duration =  4.5;
 	animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
 	animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
 	animation.repeatCount = HUGE_VALF; // Loop the animation forever
 	animation.autoreverses = YES;
-	animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-	animation.removedOnCompletion = NO;
-	[self.ariaGradientView.layer addAnimation:animation forKey:@"animateGradient"];
+	animation.timingFunction = [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseInEaseOut];
+	[self.ariaGradientView.layer addAnimation:animation forKey: @"gradientAnimation"];
+
+}
+
+
+%new
+
+- (void)setGradientStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint {
+
+	self.ariaGradientView.layer.startPoint = startPoint;
+	self.ariaGradientView.layer.endPoint = endPoint;
 
 }
 
@@ -185,10 +180,9 @@
 %hook UIScreen
 
 
-- (void)traitCollectionDidChange:(id)previousTrait {
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTrait {
 
 	%orig;
-
 	[NSNotificationCenter.defaultCenter postNotificationName:@"traitCollectionDidChange" object:nil];
 
 }
@@ -200,10 +194,8 @@
 
 %ctor {
 
-	if(kIsPrysm) return;
-
+	if(kPrysmExists) return;
 	loadWithoutAGoddamnRespring();
-
 	%init(AriaStock);
 
 }
