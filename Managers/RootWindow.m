@@ -3,7 +3,6 @@
 
 @implementation RootWindow
 
-
 + (UIWindow *)keyWindow {
 
 	UIWindow *rootWindow = nil;
@@ -11,16 +10,10 @@
 
 	for(UIWindow *window in windows)
 
-		if(window.isKeyWindow) {
-
-			rootWindow = window;
-			break;
-
-		}
+		if(window.isKeyWindow) { rootWindow = window; break; }
 
 	return rootWindow;
 
 }
-
 
 @end
