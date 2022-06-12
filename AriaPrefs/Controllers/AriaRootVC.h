@@ -3,6 +3,7 @@
 #import <AudioToolbox/AudioServices.h>
 #import <Preferences/PSListController.h>
 #import "Headers/Common.h"
+#import "Managers/AriaImageManager.h"
 #import "../Cells/AriaGaussianBlurCell.h"
 
 

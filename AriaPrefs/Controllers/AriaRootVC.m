@@ -1,13 +1,26 @@
 #import "AriaRootVC.h"
 
 
-@implementation AriaRootVC
+// Reusable
 
+static void presentAlertVCOn(UIViewController *self) {
+
+	AudioServicesPlaySystemSound(1521);
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it. The image that'll be saved is the one you currently have selected depending on dark/light mode." preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler: nil];
+	[alertController addAction: dismissAction];
+
+	[self presentViewController:alertController animated:YES completion: nil];
+
+}
+
+
+@implementation AriaRootVC
 
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"Root" target:self];
-
 	return _specifiers;
 
 }
@@ -17,9 +30,8 @@
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"Do you want to start fresh?" preferredStyle:UIAlertControllerStyleAlert];
-
-	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDestructive handler:^(UIAlertAction *action) {
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"Do you want to start fresh?" preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
 		NSFileManager *fileM = [NSFileManager defaultManager];
 
@@ -30,10 +42,10 @@
 
 	}];
 
-	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleCancel handler:nil];
+	UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Meh" style:UIAlertActionStyleDefault handler:nil];
 
-	[alertController addAction:confirmAction];
-	[alertController addAction:cancelAction];
+	[alertController addAction: confirmAction];
+	[alertController addAction: cancelAction];
 
 	[self presentViewController:alertController animated:YES completion:nil];
 
@@ -68,7 +80,10 @@
 
 }
 
+@end
 
+
+@interface AriaPrysmVC () <AriaGaussianBlurCellDelegate>
 @end
 
 
@@ -81,38 +96,33 @@
 
 - (NSArray *)specifiers {
 
-	if(!_specifiers) {
+	if(_specifiers) return nil;
+	_specifiers = [self loadSpecifiersFromPlistName:@"AriaPrysm" target:self];
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"AriaPrysm" target:self];
+	NSArray *chosenIDs = @[
+		@"GroupCell-1",
+		@"DarkPrysmImage",
+		@"LightPrysmImage",
+		@"GroupCell-2",
+		@"PrysmBlurSlider",
+		@"PRYGaussianGroupCell",
+		@"PRYGaussianBlurButton",
+		@"GroupCell-3",
+		@"PRYAnimateGradientSwitch",
+		@"GroupCell-4",
+		@"PRYGFirstColor",
+		@"PRYGSecondColor",
+		@"GroupCell-5",
+		@"PRYGradientDirection"
+	];
 
-		NSArray *chosenIDs = @[
+	savedSpecifiers = savedSpecifiers ?: [NSMutableDictionary new];
 
-			@"GroupCell-1",
-			@"DarkPrysmImage",
-			@"LightPrysmImage",
-			@"GroupCell-2",
-			@"PrysmBlurSlider",
-			@"PRYGaussianGroupCell",
-			@"PRYGaussianBlurButton",
-			@"GroupCell-3",
-			@"PRYAnimateGradientSwitch",
-			@"GroupCell-4",
-			@"PRYGFirstColor",
-			@"PRYGSecondColor",
-			@"GroupCell-5",
-			@"PRYGradientDirection"
+	for(PSSpecifier *specifier in _specifiers)
 
-		];
+		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-		savedSpecifiers = (savedSpecifiers) ?: [NSMutableDictionary new];
-
-		for(PSSpecifier *specifier in _specifiers)
-
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-				[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	}
+			[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	return _specifiers;
 
@@ -122,13 +132,10 @@
 - (id)init {
 
 	self = [super init];
+	if(!self) return nil;
 
-	if(self) {
-
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmImageChanged"), NULL, 0);
-		CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmGradientColorsChanged"), NULL, 0);
-
-	}
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmImageChanged"), NULL, 0);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmGradientColorsChanged"), NULL, 0);
 
 	return self;
 
@@ -177,7 +184,7 @@ static void postNSNotification() {
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -186,7 +193,7 @@ static void postNSNotification() {
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];	
 	[settings writeToFile:kPATH atomically:YES];
 
@@ -224,6 +231,24 @@ static void postNSNotification() {
 }
 
 
+#pragma mark AriaGaussianBlurCellDelegate
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+
+	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
+	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
+	return cell;
+
+}
+
+
+- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImageWithImage]; }
+- (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton { presentAlertVCOn(self); }
+
+@end
+
+
+@interface AriaStockVC () <AriaGaussianBlurCellDelegate>
 @end
 
 
@@ -236,38 +261,33 @@ static void postNSNotification() {
 
 - (NSArray *)specifiers {
 
-	if(!_specifiers) {
+	if(_specifiers) return nil;
+	_specifiers = [self loadSpecifiersFromPlistName:@"AriaStock" target:self];
 
-		_specifiers = [self loadSpecifiersFromPlistName:@"AriaStock" target:self];
+	NSArray *chosenIDs = @[
+		@"GroupCell1",
+		@"DarkImage",
+		@"LightImage",
+		@"GroupCell2",
+		@"BlurSlider",
+		@"GaussianGroupCell",
+		@"GaussianBlurButton",
+		@"GroupCell3",
+		@"AnimateGradientSwitch",
+		@"GroupCell4",
+		@"GFirstColor",
+		@"GSecondColor",
+		@"GroupCell5",
+		@"GradientDirections"
+	];
 
-		NSArray *chosenIDs = @[
+	savedSpecifiers = savedSpecifiers ?: [NSMutableDictionary new];
 
-			@"GroupCell1",
-			@"DarkImage",
-			@"LightImage",
-			@"GroupCell2",
-			@"BlurSlider",
-			@"GaussianGroupCell",
-			@"GaussianBlurButton",
-			@"GroupCell3",
-			@"AnimateGradientSwitch",
-			@"GroupCell4",
-			@"GFirstColor",
-			@"GSecondColor",
-			@"GroupCell5",
-			@"GradientDirections"
+	for(PSSpecifier *specifier in _specifiers)
 
-		];
+		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
 
-		savedSpecifiers = (savedSpecifiers) ?: [NSMutableDictionary new];
-
-		for(PSSpecifier *specifier in _specifiers)
-
-			if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-				[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	}
+			[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
 
 	return _specifiers;
 
@@ -277,9 +297,7 @@ static void postNSNotification() {
 - (id)init {
 
 	self = [super init];
-
 	if(self) [self setupNavBarButton];
-
 	return self;
 
 }
@@ -320,12 +338,12 @@ static void postNSNotification() {
 
 	UIImage *buttonImage = [UIImage systemImageNamed:@"infinity"];
 
-	UIButton *infoButton =  [UIButton buttonWithType:UIButtonTypeCustom];
+	UIButton *infoButton =  [UIButton new];
 	infoButton.tintColor = kAriaTintColor;
-	[infoButton setImage : buttonImage forState:UIControlStateNormal];
-	[infoButton addTarget : self action:@selector(didTapNavBarInfoButton) forControlEvents:UIControlEventTouchUpInside];
+	[infoButton setImage:buttonImage forState: UIControlStateNormal];
+	[infoButton addTarget:self action:@selector(didTapNavBarInfoButton) forControlEvents: UIControlEventTouchUpInside];
 
-	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView:infoButton];
+	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView: infoButton];
 	self.navigationItem.rightBarButtonItem = changelogButtonItem;
 
 }
@@ -335,10 +353,8 @@ static void postNSNotification() {
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The options you enable here won't inject unless you either disable Prysm (with iCleaner Pro) or you uninstall it." preferredStyle:UIAlertControllerStyleAlert];
-
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The options you enable here won't inject unless you either disable Prysm (with iCleaner Pro) or you uninstall it." preferredStyle: UIAlertControllerStyleAlert];
 	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Gotcha" style:UIAlertActionStyleCancel handler:nil];
-
 	[alertController addAction: dismissAction];
 
 	[self presentViewController:alertController animated:YES completion: nil];
@@ -349,7 +365,7 @@ static void postNSNotification() {
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -358,7 +374,7 @@ static void postNSNotification() {
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile:kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];	
 	[settings writeToFile:kPATH atomically:YES];
 
@@ -393,92 +409,19 @@ static void postNSNotification() {
 }
 
 
-@end
-
-
 #pragma mark AriaGaussianBlurCellDelegate
 
-@interface AriaPrysmVC (Delegate) <AriaGaussianBlurCellDelegate>
-@end
-
-
-@interface AriaStockVC (Delegate) <AriaGaussianBlurCellDelegate>
-@end
-
-
-@implementation AriaPrysmVC (Delegate)
-
-
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
 	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
-
 	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
-
 	return cell;
 
 }
 
 
-- (void)didTapGaussianBlurButton {
-
-	[[AriaImageManager sharedInstance] blurImageWithImage];
-
-}
-
-
-- (void)didTapGaussianBlurInfoButton {
-
-	AudioServicesPlaySystemSound(1521);
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
-
-	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler: nil];
-
-	[alertController addAction: dismissAction];
-
-	[self presentViewController:alertController animated:YES completion: nil];
-
-}
-
-
-@end
-
-
-@implementation AriaStockVC (Delegate)
-
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
-
-	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
-
-	return cell;
-
-}
-
-
-- (void)didTapGaussianBlurButton {
-
-	[[AriaImageManager sharedInstance] blurImageWithImage];
-
-}
-
-
-- (void)didTapGaussianBlurInfoButton {
-
-	AudioServicesPlaySystemSound(1521);
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it." preferredStyle: UIAlertControllerStyleAlert];
-
-	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler: nil];
-
-	[alertController addAction: dismissAction];
-
-	[self presentViewController:alertController animated:YES completion: nil];
-
-}
+- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImageWithImage]; }
+- (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton { presentAlertVCOn(self); }
 
 
 @end
@@ -486,26 +429,21 @@ static void postNSNotification() {
 
 @implementation AriaContributorsVC
 
-
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AriaContributors" target:self];
-
 	return _specifiers;
 
 }
-
 
 @end
 
 
 @implementation AriaLinksVC
 
-
 - (NSArray *)specifiers {
 
 	if(!_specifiers) _specifiers = [self loadSpecifiersFromPlistName:@"AriaLinks" target:self];
-
 	return _specifiers;
 
 }
@@ -545,20 +483,16 @@ static void postNSNotification() {
 
 }
 
-
 @end
 
 
 @implementation AriaTintCell
 
-
 - (void)setTitle:(NSString *)t {
 
 	[super setTitle:t];
-
 	self.titleLabel.textColor = kAriaTintColor;
 
 }
-
 
 @end

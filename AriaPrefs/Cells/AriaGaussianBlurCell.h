@@ -1,12 +1,12 @@
 #import "Headers/Constants.h"
-#import "Managers/AriaImageManager.h"
 #import <Preferences/PSTableCell.h>
 
 
 @protocol AriaGaussianBlurCellDelegate <NSObject>
 
-@required - (void)didTapGaussianBlurButton;
-@required - (void)didTapGaussianBlurInfoButton;
+@required
+- (void)ariaGaussianBlurCellDidTapGaussianBlurButton;
+- (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton;
 
 @end
 
