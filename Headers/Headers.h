@@ -10,14 +10,16 @@
 
 
 @interface PrysmCardBackgroundViewController : UIViewController
-@property (nonatomic, strong, readwrite) UIView *overlayView;
-@property (nonatomic, strong, readwrite) _UIBackdropView *backdropView;
+@property (nonatomic, strong) UIView *overlayView;
+@property (nonatomic, strong) _UIBackdropView *backdropView;
+- (void)setGradientStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint;
 @end
 
 
-UIImage *prysmDarkImage;
-UIImage *prysmLightImage;
-UIImageView *prysmImageView;
+static UIImage *prysmDarkImage;
+static UIImage *prysmLightImage;
+static UIImageView *prysmImageView;
+static AriaGradientView *prysmGradientView;
 
 
 // Aria Stock
@@ -33,9 +35,13 @@ UIImageView *prysmImageView;
 @property (nonatomic, strong) MTMaterialView *overlayBackgroundView;
 - (void)unleashAriaImage;
 - (void)unleashAriaGradients;
+- (void)setGradientStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint;
 @end
 
 
 @interface CCUIOverlayTransitionState : NSObject
 @property (assign, nonatomic, readonly) CGFloat clampedPresentationProgress;
 @end
+
+
+static AriaBlurView *ariaBlurView;

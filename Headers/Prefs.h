@@ -10,7 +10,7 @@ static float prysmAlpha;
 static BOOL prysmGradients;
 static BOOL prysmGradientAnimation;
 
-static int prysmGradientDirection;
+static NSInteger prysmGradientDirection;
 
 
 // Aria Stock
@@ -22,7 +22,7 @@ static float alpha;
 static BOOL giveMeThoseGradients;
 static BOOL neatGradientAnimation;
 
-static int gradientDirection;
+static NSInteger gradientDirection;
 
 static void loadWithoutAGoddamnRespring() {
 

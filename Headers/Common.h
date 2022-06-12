@@ -10,7 +10,7 @@
 
 
 @interface _UIBackdropViewSettings : NSObject
-+ (id)settingsForStyle:(long long)arg1;
++ (id)settingsForStyle:(NSInteger)arg1;
 @end
 
 
