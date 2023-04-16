@@ -242,7 +242,7 @@ static void postNSNotification() {
 }
 
 
-- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImageWithImage]; }
+- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImage]; }
 - (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton { presentAlertVCOn(self); }
 
 @end
@@ -420,7 +420,7 @@ static void postNSNotification() {
 }
 
 
-- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImageWithImage]; }
+- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImage]; }
 - (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton { presentAlertVCOn(self); }
 
 

@@ -1,6 +1,6 @@
 BUNDLE_NAME = AriaPrefs
 
-AriaPrefs_FILES = Controllers/AriaRootVC.m Cells/AriaGaussianBlurCell.m ../Managers/AriaImageManager.m ../Managers/RootWindow.m
+AriaPrefs_FILES = $(wildcard **/*.m) ../Managers/AriaImageManager.m
 AriaPrefs_CFLAGS = -fobjc-arc
 AriaPrefs_LIBRARIES = gcuniversal
 AriaPrefs_FRAMEWORKS = UIKit
