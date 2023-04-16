@@ -54,9 +54,9 @@ static void presentAlertVCOn(UIViewController *self) {
 
 - (void)crossDissolveBlur {
 
-	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle: 2];
 
-	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithSettings:settings];
+	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
 	backdropView.alpha = 0;
 	backdropView.frame = self.view.bounds;
 	backdropView.clipsToBounds = YES;
@@ -175,8 +175,8 @@ static void presentAlertVCOn(UIViewController *self) {
 
 static void postNSNotification() {
 
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmImageApplied" object:nil];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmGradientsApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmImageNotification object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmGradientsNotification object:nil];
 
 }
 
@@ -184,7 +184,7 @@ static void postNSNotification() {
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -193,14 +193,14 @@ static void postNSNotification() {
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];	
-	[settings writeToFile:kPATH atomically:YES];
+	[settings writeToFile:kPath atomically:YES];
 
 	[super setPreferenceValue:value specifier:specifier];
 
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmImageApplied" object:nil];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:@"prysmGradientsApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmImageNotification object:nil];
+	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmGradientsNotification object:nil];
 
 	NSString *key = [specifier propertyForKey:@"key"];
 
@@ -365,7 +365,7 @@ static void postNSNotification() {
 - (id)readPreferenceValue:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
 
 }
@@ -374,9 +374,9 @@ static void postNSNotification() {
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 
 	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPATH]];
+	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
 	[settings setObject:value forKey:specifier.properties[@"key"]];	
-	[settings writeToFile:kPATH atomically:YES];
+	[settings writeToFile:kPath atomically:YES];
 
 	[super setPreferenceValue:value specifier:specifier];
 

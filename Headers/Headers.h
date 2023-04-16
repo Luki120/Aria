@@ -1,10 +1,11 @@
-#import <substrate.h>
+@import UIKit;
+@import CydiaSubstrate;
+#import "Common.h"
 #import "Views/AriaBlurView.h"
 #import "Views/AriaGradientView.h"
 
 
 // Aria Prysm
-
 @interface SpringBoard : UIApplication
 @end
 
@@ -16,14 +17,7 @@
 @end
 
 
-static UIImage *prysmDarkImage;
-static UIImage *prysmLightImage;
-static UIImageView *prysmImageView;
-static AriaGradientView *prysmGradientView;
-
-
 // Aria Stock
-
 @interface MTMaterialView : UIView
 @property (assign, nonatomic) BOOL shouldCrossfade;
 @end
@@ -34,6 +28,7 @@ static AriaGradientView *prysmGradientView;
 @property (nonatomic, strong) AriaGradientView *ariaGradientView;
 @property (nonatomic, strong) MTMaterialView *overlayBackgroundView;
 - (void)unleashAriaImage;
+- (void)updateAriaImage;
 - (void)unleashAriaGradients;
 - (void)setGradientStartPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint;
 @end
@@ -42,6 +37,3 @@ static AriaGradientView *prysmGradientView;
 @interface CCUIOverlayTransitionState : NSObject
 @property (assign, nonatomic, readonly) CGFloat clampedPresentationProgress;
 @end
-
-
-static AriaBlurView *ariaBlurView;

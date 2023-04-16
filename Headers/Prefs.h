@@ -1,8 +1,6 @@
-#import "Headers/Constants.h"
-
+#import "Common.h"
 
 // Aria Prysm
-
 static BOOL isPrysmImage;
 
 static float prysmAlpha;
@@ -12,9 +10,7 @@ static BOOL prysmGradientAnimation;
 
 static NSInteger prysmGradientDirection;
 
-
 // Aria Stock
-
 static BOOL giveMeTheImage;
 
 static float alpha;
@@ -26,7 +22,7 @@ static NSInteger gradientDirection;
 
 static void loadWithoutAGoddamnRespring() {
 
-	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: kPATH];
+	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile: kPath];
 	NSMutableDictionary *prefs = dict ? [dict mutableCopy] : [NSMutableDictionary dictionary];
 
 	isPrysmImage = prefs[@"isPrysmImage"] ? [prefs[@"isPrysmImage"] boolValue] : NO;

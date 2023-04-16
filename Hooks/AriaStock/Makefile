@@ -1,6 +1,6 @@
 TWEAK_NAME = AriaStock
 
-AriaStock_FILES = AriaStock.xm ../../Managers/AriaImageManager.m ../../Managers/RootWindow.m ../../Views/AriaBlurView.m ../../Views/AriaGradientView.m
+AriaStock_FILES = AriaStock.mm ../../Views/AriaBlurView.m ../../Views/AriaGradientView.m
 AriaStock_CFLAGS = -fobjc-arc
 AriaStock_LIBRARIES = gcuniversal
 

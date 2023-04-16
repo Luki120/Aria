@@ -2,6 +2,16 @@
 #import "Headers/Prefs.h"
 
 
+static NSString *const kPrysmGradientFirstColor = @"prysmGradientFirstColor";
+static NSString *const kPrysmGradientSecondColor = @"prysmGradientSecondColor";
+
+static NSNotificationName const AriaTraitCollectionDidChangeNotification = @"AriaTraitCollectionDidChangeNotification";
+
+static UIImage *prysmDarkImage;
+static UIImage *prysmLightImage;
+static UIImageView *prysmImageView;
+static AriaGradientView *prysmGradientView;
+
 static void new_setPrysmImage(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	loadWithoutAGoddamnRespring();
@@ -61,9 +71,9 @@ static void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _c
 
 	if(!prysmGradients) return;
 
-	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kPrysmGradientFirstColor fallback:@"ffffff"];
-	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey:kPrysmGradientSecondColor fallback:@"ffffff"];
-	NSArray *gradientColors = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
+	UIColor *firstColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey: kPrysmGradientFirstColor];
+	UIColor *secondColor = [GcColorPickerUtils colorFromDefaults:kDefaults withKey: kPrysmGradientSecondColor];
+	NSArray *gradientColors = @[(id)firstColor.CGColor, (id)secondColor.CGColor];
 
 	self.overlayView.hidden = YES;
 	self.backdropView.hidden = YES;
@@ -76,39 +86,14 @@ static void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _c
 	[self.view insertSubview:prysmGradientView atIndex:0];
 
 	switch(prysmGradientDirection) {
-
-		case 1: // Top to Bottom
-
-			[self setGradientStartPoint:CGPointMake(0.5, 0) endPoint:CGPointMake(0.5, 1)]; break;
-
-		case 2: // Left to Right
-
-			[self setGradientStartPoint:CGPointMake(0, 0.5) endPoint:CGPointMake(1, 0.5)]; break;
-
-		case 3: // Right to Left
-
-			[self setGradientStartPoint:CGPointMake(1, 0.5) endPoint:CGPointMake(0, 0.5)]; break;
-
-		case 4: // Upper Left lower right
-
-			[self setGradientStartPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 1)]; break;
-
-		case 5: // Lower left upper right
-
-			[self setGradientStartPoint:CGPointMake(0, 1) endPoint:CGPointMake(1, 0)]; break;
-
-		case 6: // Upper right lower left
-
-			[self setGradientStartPoint:CGPointMake(1, 0) endPoint:CGPointMake(0, 1)]; break;
-
-		case 7: // Lower right upper left
-
-			[self setGradientStartPoint:CGPointMake(1, 1) endPoint:CGPointMake(0, 0)]; break;
-
-		default: // Bottom to Top
-
-			[self setGradientStartPoint:CGPointMake(0.5, 1) endPoint:CGPointMake(0.5, 0)]; break;
-
+		case 1: [self setGradientStartPoint:CGPointMake(0.5, 0) endPoint:CGPointMake(0.5, 1)]; break; // Top to bottom
+		case 2: [self setGradientStartPoint:CGPointMake(0, 0.5) endPoint:CGPointMake(1, 0.5)]; break; // Left to right
+		case 3: [self setGradientStartPoint:CGPointMake(1, 0.5) endPoint:CGPointMake(0, 0.5)]; break; // Right to left
+		case 4: [self setGradientStartPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 1)]; break; // Upper left lower right
+		case 5: [self setGradientStartPoint:CGPointMake(0, 1) endPoint:CGPointMake(1, 0)]; break; // Lower left upper right
+		case 6: [self setGradientStartPoint:CGPointMake(1, 0) endPoint:CGPointMake(0, 1)]; break; // Upper right lower left
+		case 7: [self setGradientStartPoint:CGPointMake(1, 1) endPoint:CGPointMake(0, 0)]; break; // Lower right upper left
+		default: [self setGradientStartPoint:CGPointMake(0.5, 1) endPoint:CGPointMake(0.5, 0)]; break; // Bottom to top
 	}
 
 	if(!prysmGradientAnimation) return;
@@ -116,8 +101,8 @@ static void new_setPrysmGradient(PrysmCardBackgroundViewController *self, SEL _c
 	CABasicAnimation *animation = [CABasicAnimation animation];
 	animation.keyPath = @"colors";
 	animation.duration = 4.5;
-	animation.fromValue = [NSArray arrayWithObjects:(id)firstColor.CGColor, (id)secondColor.CGColor, nil];
-	animation.toValue = [NSArray arrayWithObjects:(id)secondColor.CGColor, (id)firstColor.CGColor, nil];
+	animation.fromValue = @[(id)firstColor.CGColor, (id)secondColor.CGColor];
+	animation.toValue = @[(id)secondColor.CGColor, (id)firstColor.CGColor];
 	animation.repeatCount = HUGE_VALF; // Loop the animation forever
 	animation.autoreverses = YES;
 	animation.timingFunction = [CAMediaTimingFunction functionWithName: kCAMediaTimingFunctionEaseInEaseOut];
@@ -132,77 +117,74 @@ static void new_setGradientStartAndEndPoint(PrysmCardBackgroundViewController *s
 
 }
 
-static void (*origTCDC)(UIScreen *self, SEL _cmd, UITraitCollection *);
-
+static void (*origTCDC)(UIScreen *, SEL, UITraitCollection *);
 static void overrideTCDC(UIScreen *self, SEL _cmd, UITraitCollection *previousTrait) {
 
 	origTCDC(self, _cmd, previousTrait);
-	[NSNotificationCenter.defaultCenter postNotificationName:@"traitCollectionDidChange" object:nil];
+	[NSNotificationCenter.defaultCenter postNotificationName:AriaTraitCollectionDidChangeNotification object:nil];
 
 }
 
-static void (*origVDLS)(PrysmCardBackgroundViewController *self, SEL _cmd);
-
-static void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) { // create notifications observers
+static void (*origVDLS)(PrysmCardBackgroundViewController *, SEL);
+static void overrideVDLS(PrysmCardBackgroundViewController *self, SEL _cmd) {
 
 	origVDLS(self, _cmd);
 	new_setPrysmImage(self, _cmd);
 	new_setPrysmGradient(self, _cmd);
 
-	[NSDistributedNotificationCenter.defaultCenter removeObserver:self];
-	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:@"prysmImageApplied" object:nil];
-	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmGradient) name:@"prysmGradientsApplied" object:nil];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmImage) name:AriaDidApplyPrysmImageNotification object:nil];
+	[NSDistributedNotificationCenter.defaultCenter addObserver:self selector:@selector(setPrysmGradient) name:AriaDidApplyPrysmGradientsNotification object:nil];
 
-	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updatePrysmImage) name:@"traitCollectionDidChange" object:nil];
-
-}
-
-static void(*origADFL)(SpringBoard *self, SEL _cmd, id);
-
-static void overrideADFL(SpringBoard *self, SEL _cmd, id app) {
-
-	origADFL(self, _cmd, app);
-
-	/*--- initialize the hooks when WE decide it, fuck dlopen, this is better :nfr: ---*/
-
-	MSHookMessageEx(kClass(@"UIScreen"), @selector(traitCollectionDidChange:), (IMP) &overrideTCDC, (IMP *) &origTCDC);
-	MSHookMessageEx(kClass(@"PrysmCardBackgroundViewController"), @selector(viewDidLayoutSubviews), (IMP) &overrideVDLS, (IMP *) &origVDLS);	
-
-	class_addMethod(
-		kClass(@"PrysmCardBackgroundViewController"),
-		@selector(setPrysmImage),
-		(IMP)&new_setPrysmImage,
-		"v@:"
-	);
-
-	class_addMethod(
-		kClass(@"PrysmCardBackgroundViewController"),
-		@selector(updatePrysmImage),
-		(IMP)&new_updatePrysmImage,
-		"v@:"
-	);
-
-	class_addMethod(
-		kClass(@"PrysmCardBackgroundViewController"),
-		@selector(setPrysmGradient),
-		(IMP)&new_setPrysmGradient,
-		"v@:"
-	);
-
-	class_addMethod(
-		kClass(@"PrysmCardBackgroundViewController"),
-		@selector(setGradientStartPoint:endPoint:),
-		(IMP)&new_setGradientStartAndEndPoint,
-		"v@:@@"
-	);
+	[NSNotificationCenter.defaultCenter addObserver:self selector:@selector(updatePrysmImage) name:AriaTraitCollectionDidChangeNotification object:nil];
 
 }
 
+static id observer;
+static void appDidFinishLaunching() {
+
+	observer = [NSNotificationCenter.defaultCenter addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification *notification) {
+
+		MSHookMessageEx(kClass(@"UIScreen"), @selector(traitCollectionDidChange:), (IMP) &overrideTCDC, (IMP *) &origTCDC);
+		MSHookMessageEx(kClass(@"PrysmCardBackgroundViewController"), @selector(viewDidLayoutSubviews), (IMP) &overrideVDLS, (IMP *) &origVDLS);	
+
+		class_addMethod(
+			kClass(@"PrysmCardBackgroundViewController"),
+			@selector(setPrysmImage),
+			(IMP) &new_setPrysmImage,
+			"v@:"
+		);
+
+		class_addMethod(
+			kClass(@"PrysmCardBackgroundViewController"),
+			@selector(updatePrysmImage),
+			(IMP) &new_updatePrysmImage,
+			"v@:"
+		);
+
+		class_addMethod(
+			kClass(@"PrysmCardBackgroundViewController"),
+			@selector(setPrysmGradient),
+			(IMP) &new_setPrysmGradient,
+			"v@:"
+		);
+
+		class_addMethod(
+			kClass(@"PrysmCardBackgroundViewController"),
+			@selector(setGradientStartPoint:endPoint:),
+			(IMP) &new_setGradientStartAndEndPoint,
+			"v@:@@"
+		);
+
+		[NSNotificationCenter.defaultCenter removeObserver: observer];
+
+	}];
+
+}
 
 __attribute__((constructor)) static void init() {
 
 	if(!kPrysmExists) return;
 	loadWithoutAGoddamnRespring();
-	MSHookMessageEx(kClass(@"SpringBoard"), @selector(applicationDidFinishLaunching:), (IMP) &overrideADFL, (IMP *) &origADFL);
+	appDidFinishLaunching();
 
 }

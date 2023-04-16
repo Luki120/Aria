@@ -1,5 +1,5 @@
-#import "Headers/Constants.h"
 #import "Managers/RootWindow.h"
+#import "Headers/Common.h"
 
 
 @interface AriaImageManager : NSObject

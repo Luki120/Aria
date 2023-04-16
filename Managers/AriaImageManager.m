@@ -75,7 +75,7 @@
 }
 
 
-- (void)saveImageToGallery:(UIImage *)image { kSaveToGallery(image, nil, nil, nil); }
+- (void)saveImageToGallery:(UIImage *)image { UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil); }
 
 
 - (void)proudSuccessAlertController {

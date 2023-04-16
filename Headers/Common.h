@@ -1,10 +1,24 @@
-@import UIKit;
+@import GcUniversal.ColorPickerUtils;
+@import GcUniversal.ImagePickerUtils;
+
+
+static NSString *const kDefaults = @"me.luki.ariaprefs";
+static NSString *const kPath = @"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist";
+static NSString *const kPrysmDarkImage = @"prysmDarkImage";
+static NSString *const kPrysmLightImage = @"prysmLightImage";
+static NSString *const kStockDarkImage = @"stockDarkImage";
+static NSString *const kStockLightImage = @"stockLightImage";
+
+static NSNotificationName const AriaDidApplyPrysmImageNotification = @"AriaDidApplyPrysmImageNotification";
+static NSNotificationName const AriaDidApplyPrysmGradientsNotification = @"AriaDidApplyPrysmGradientsNotification";
+
+#define kClass(class) NSClassFromString(class)
+#define kAriaTintColor [UIColor colorWithRed:0.47 green:0.04 blue:0.27 alpha: 1.0];
+#define kUserInterfaceStyle UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark
+#define kPrysmExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]
 
 
 @interface _UIBackdropView : UIView
-@property (assign, nonatomic) BOOL blurRadiusSetOnce;
-@property (copy, nonatomic) NSString *_blurQuality;
-- (id)initWithSettings:(id)arg1;
 - (id)initWithFrame:(CGRect)arg1 autosizesToFitSuperview:(BOOL)arg2 settings:(id)arg3;
 @end
 

@@ -1,5 +1,5 @@
-#import "Headers/Constants.h"
-#import <Preferences/PSTableCell.h>
+#import "Headers/Common.h"
+@import Preferences.PSTableCell;
 
 
 @protocol AriaGaussianBlurCellDelegate <NSObject>
