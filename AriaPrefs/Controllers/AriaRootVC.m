@@ -4,7 +4,13 @@
 static NSString *const kImagesPath = @"/var/mobile/Library/Preferences/me.luki.aprilprefs/";
 
 
-@implementation AriaRootVC
+@implementation AriaRootVC {
+
+	OBWelcomeController *changelogController;
+
+}
+
+// ! Lifecycle
 
 - (NSArray *)specifiers {
 
@@ -22,7 +28,51 @@ static NSString *const kImagesPath = @"/var/mobile/Library/Preferences/me.luki.a
 	static dispatch_once_t token;
 	dispatch_once(&token, ^{ registerAriaTintCellClass(); });
 
+	[self setupUI];
+
 	return self;
+
+}
+
+
+- (void)setupUI {
+
+	UIButton *changelogButton = [UIButton new];
+	changelogButton.tintColor = kAriaTintColor;
+	[changelogButton setImage:[UIImage systemImageNamed: @"atom"] forState:UIControlStateNormal];
+	[changelogButton addTarget:self action:@selector(showWtfChangedInThisVersion) forControlEvents:UIControlEventTouchUpInside];
+
+	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView: changelogButton];
+	self.navigationItem.rightBarButtonItem = changelogButtonItem;
+
+}
+
+// ! Selectors
+
+- (void)showWtfChangedInThisVersion {
+
+	AudioServicesPlaySystemSound(1521);
+
+	UIImage *tweakImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AriaPrefs.bundle/Assets/AriaIcon.png"];
+	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
+
+	if(changelogController) { [self presentViewController:changelogController animated:YES completion:nil]; return; }
+	changelogController = [[OBWelcomeController alloc] initWithTitle:@"Aria" detailText:@"0.9.8~RC" icon:tweakImage];
+	[changelogController addBulletedListItemWithTitle:@"Code" description:@"Refactoring ⇝ everything works the same, but better." image:checkmarkImage];
+	[changelogController addBulletedListItemWithTitle:@"Tweak" description:@"Images saved using the Gaussian blur option will be added to a custom \"Aria\" album in the Photos app." image:checkmarkImage];
+
+	_UIBackdropViewSettings *settings = [_UIBackdropViewSettings settingsForStyle:2];
+
+	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
+	backdropView.clipsToBounds = YES;
+	[changelogController.viewIfLoaded insertSubview:backdropView atIndex:0];
+
+	changelogController.viewIfLoaded.backgroundColor = UIColor.clearColor;
+	changelogController.view.tintColor = kAriaTintColor;
+	changelogController.modalInPresentation = NO;
+	changelogController.modalPresentationStyle = UIModalPresentationPageSheet;
+
+	[self presentViewController:changelogController animated:YES completion:nil];
 
 }
 

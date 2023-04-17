@@ -6,6 +6,12 @@
 #import "Headers/Common.h"
 
 
+@interface OBWelcomeController : UIViewController
+- (id)initWithTitle:(id)arg1 detailText:(id)arg2 icon:(id)arg3;
+- (void)addBulletedListItemWithTitle:(id)arg1 description:(id)arg2 image:(id)arg3;
+@end
+
+
 @interface AriaRootVC : PSListController
 @end
 
