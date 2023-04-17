@@ -4,17 +4,15 @@
 
 ## Features
 
-* Custom dark mode image.
-* Custom light mode image.
-* Epic blur with custom intensity.
-* Gaussian blur with custom intensity.
+* Custom dark & light mode image.
+* Epic & gaussian blur with custom intensity.
 * Gradients with custom directions & optional animation.
 * Prysm support.
 
 ## Socials
 
 * [Twitter](https://twitter.com/Lukii120)
-* [Support on Discord](https://discord.gg/2y5uWhhNJu)
+* [Support on Discord](https://discord.gg/jbE3avwSHs)
 
 ## Contributing
 
