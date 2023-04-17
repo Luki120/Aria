@@ -2,11 +2,13 @@
 @import Preferences.PSTableCell;
 
 
+@class AriaGaussianBlurCell;
+
 @protocol AriaGaussianBlurCellDelegate <NSObject>
 
 @required
-- (void)ariaGaussianBlurCellDidTapGaussianBlurButton;
-- (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton;
+- (void)didTapGaussianBlurButtonInAriaGuassianBlurCell:(AriaGaussianBlurCell *)ariaGuassianBlurCell;
+- (void)didTapGaussianBlurInfoButtonInAriaGaussianBlurCell:(AriaGaussianBlurCell *)ariaGuassianBlurCell;
 
 @end
 

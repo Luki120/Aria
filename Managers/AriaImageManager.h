@@ -1,10 +1,12 @@
 #import "Headers/Common.h"
+@import AudioToolbox.AudioServices;
 @import Photos;
 
 
 @interface AriaImageManager : NSObject
 + (AriaImageManager *)sharedInstance;
 - (void)blurImage;
+- (void)presentInfoAlertController;
 + (instancetype)alloc __attribute__((unavailable("alloc not available, call sharedInstance instead")));
 - (instancetype)copy __attribute__((unavailable("copy not available, call sharedInstance instead")));
 - (instancetype)init __attribute__((unavailable("init not available, call sharedInstance instead")));

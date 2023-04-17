@@ -112,6 +112,19 @@
 }
 
 
+- (void)presentInfoAlertController {
+
+	AudioServicesPlaySystemSound(1521);
+
+	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it. The image that'll be saved is the one you currently have selected depending on dark/light mode." preferredStyle: UIAlertControllerStyleAlert];
+	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler: nil];
+	[alertController addAction: dismissAction];
+
+	[rootViewController presentViewController:alertController animated:YES completion: nil];
+
+}
+
+
 - (UIViewController *)getRootViewController {
 
 	UIViewController *rootVC = nil;

@@ -1,19 +1,7 @@
 #import "AriaRootVC.h"
 
 
-// Reusable
-
-static void presentAlertVCOn(UIViewController *self) {
-
-	AudioServicesPlaySystemSound(1521);
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The gaussian blur is an actual blur applied to the image, rather than an overlay view, like the epic one. This means you can save any image you want with the blur applied, and with any intensity you want. Since generating the blur takes quite some resources, including it directly as an option wouldn't be the best performance wise without sacrificing on the fly preferences. However, you can save any image you want and then come back here and apply it. The image that'll be saved is the one you currently have selected depending on dark/light mode." preferredStyle: UIAlertControllerStyleAlert];
-	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Got it" style:UIAlertActionStyleDefault handler: nil];
-	[alertController addAction: dismissAction];
-
-	[self presentViewController:alertController animated:YES completion: nil];
-
-}
+static NSString *const kImagesPath = @"/var/mobile/Library/Preferences/me.luki.aprilprefs/";
 
 
 @implementation AriaRootVC
@@ -26,6 +14,19 @@ static void presentAlertVCOn(UIViewController *self) {
 }
 
 
+- (id)init {
+
+	self = [super init];
+	if(!self) return nil;
+
+	static dispatch_once_t token;
+	dispatch_once(&token, ^{ registerAriaTintCellClass(); });
+
+	return self;
+
+}
+
+
 - (void)shatterThePrefsToPieces {
 
 	AudioServicesPlaySystemSound(1521);
@@ -33,10 +34,8 @@ static void presentAlertVCOn(UIViewController *self) {
 	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"Do you want to start fresh?" preferredStyle: UIAlertControllerStyleAlert];
 	UIAlertAction *confirmAction = [UIAlertAction actionWithTitle:@"Shoot" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
 
-		NSFileManager *fileM = [NSFileManager defaultManager];
-
-		[fileM removeItemAtPath:@"/var/mobile/Library/Preferences/me.luki.ariaprefs/" error:nil];
-		[fileM removeItemAtPath:@"/var/mobile/Library/Preferences/me.luki.ariaprefs.plist" error:nil];
+		[[NSFileManager defaultManager] removeItemAtPath:kPath error:nil];
+		[[NSFileManager defaultManager] removeItemAtPath:kImagesPath error:nil];
 
 		[self crossDissolveBlur];
 
@@ -58,10 +57,8 @@ static void presentAlertVCOn(UIViewController *self) {
 
 	_UIBackdropView *backdropView = [[_UIBackdropView alloc] initWithFrame:CGRectZero autosizesToFitSuperview:YES settings:settings];
 	backdropView.alpha = 0;
-	backdropView.frame = self.view.bounds;
 	backdropView.clipsToBounds = YES;
-	backdropView.layer.masksToBounds = YES;
-	[self.view addSubview:backdropView];
+	[self.view addSubview: backdropView];
 
 	[UIView animateWithDuration:1 delay:0 options:UIViewAnimationOptionTransitionCrossDissolve animations:^{
 
@@ -75,354 +72,38 @@ static void presentAlertVCOn(UIViewController *self) {
 - (void)launchRespring {
 
 	pid_t pid;
-	const char* args[] = {"sbreload", NULL, NULL, NULL};
-	posix_spawn(&pid, "/usr/bin/sbreload", NULL, NULL, (char* const*)args, NULL);
+	const char* args[] = {"killall", "backboardd", NULL};
+	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
 
 }
 
-@end
+// ! Dark juju
 
+static void aria_setTitle(PSTableCell *self, SEL _cmd, NSString *title) {
 
-@interface AriaPrysmVC () <AriaGaussianBlurCellDelegate>
-@end
+	struct objc_super superSetTitle = {
+		self,
+		[self superclass]
+	};
 
+	id (*superCall)(struct objc_super *, SEL, NSString *) = (void *)objc_msgSendSuper;
+	superCall(&superSetTitle, _cmd, title);
 
-@implementation AriaPrysmVC {
-
-	NSMutableDictionary *savedSpecifiers;
-
-}
-
-
-- (NSArray *)specifiers {
-
-	if(_specifiers) return nil;
-	_specifiers = [self loadSpecifiersFromPlistName:@"AriaPrysm" target:self];
-
-	NSArray *chosenIDs = @[
-		@"GroupCell-1",
-		@"DarkPrysmImage",
-		@"LightPrysmImage",
-		@"GroupCell-2",
-		@"PrysmBlurSlider",
-		@"PRYGaussianGroupCell",
-		@"PRYGaussianBlurButton",
-		@"GroupCell-3",
-		@"PRYAnimateGradientSwitch",
-		@"GroupCell-4",
-		@"PRYGFirstColor",
-		@"PRYGSecondColor",
-		@"GroupCell-5",
-		@"PRYGradientDirection"
-	];
-
-	savedSpecifiers = savedSpecifiers ?: [NSMutableDictionary new];
-
-	for(PSSpecifier *specifier in _specifiers)
-
-		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-			[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	return _specifiers;
+	self.titleLabel.textColor = kAriaTintColor;
+	self.titleLabel.highlightedTextColor = kAriaTintColor;
 
 }
 
+static void registerAriaTintCellClass() {
 
-- (id)init {
+	Class AriaTintCellClass = objc_allocateClassPair([PSTableCell class], "AriaTintCell", 0);
+	Method method = class_getInstanceMethod([PSTableCell class], @selector(setTitle:));
+	const char *typeEncoding = method_getTypeEncoding(method);
+	class_addMethod(AriaTintCellClass, @selector(setTitle:), (IMP) aria_setTitle, typeEncoding);
 
-	self = [super init];
-	if(!self) return nil;
-
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmImageChanged"), NULL, 0);
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, (CFNotificationCallback)postNSNotification, CFSTR("me.luki.ariaprefs/prysmGradientColorsChanged"), NULL, 0);
-
-	return self;
+	objc_registerClassPair(AriaTintCellClass);
 
 }
-
-
-- (void)viewDidLoad {
-
-	[super viewDidLoad];
-	[self reloadSpecifiers];
-
-}
-
-
-- (void)reloadSpecifiers { // Dynamic specifiers
-
-	[super reloadSpecifiers];
-
-	if(![[self readPreferenceValue:[self specifierForID:@"PrysmSwitch"]] boolValue])
-
-		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] animated:NO];
-
-	else if(![self containsSpecifier:savedSpecifiers[@"GroupCell-1"]])
-
-		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] afterSpecifierID:@"PrysmSwitch" animated:NO];
-
-	if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
-
-		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] animated:NO];
-
-	else if(![self containsSpecifier:[self specifierForID:@"GroupCell-3"]])
-
-		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:NO];
-
-}
-
-
-static void postNSNotification() {
-
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmImageNotification object:nil];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmGradientsNotification object:nil];
-
-}
-
-
-- (id)readPreferenceValue:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];	
-	[settings writeToFile:kPath atomically:YES];
-
-	[super setPreferenceValue:value specifier:specifier];
-
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmImageNotification object:nil];
-	[NSDistributedNotificationCenter.defaultCenter postNotificationName:AriaDidApplyPrysmGradientsNotification object:nil];
-
-	NSString *key = [specifier propertyForKey:@"key"];
-
-	if([key isEqualToString:@"isPrysmImage"]) {
-
-		if(![[self readPreferenceValue:[self specifierForID:@"PrysmSwitch"]] boolValue])
-
-			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] animated:YES];
-
-		else if(![self containsSpecifier:savedSpecifiers[@"GroupCell-1"]])
-
-			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-1"], savedSpecifiers[@"DarkPrysmImage"], savedSpecifiers[@"LightPrysmImage"], savedSpecifiers[@"GroupCell-2"], savedSpecifiers[@"PrysmBlurSlider"], savedSpecifiers[@"PRYGaussianGroupCell"], savedSpecifiers[@"PRYGaussianBlurButton"]] afterSpecifierID:@"PrysmSwitch" animated:YES];
-
-	}
-
-	if([key isEqualToString:@"prysmGradients"]) {
-
-		if(![[self readPreferenceValue:[self specifierForID:@"PRYGradientSwitch"]] boolValue])
-
-			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] animated:YES];
-
-		else if(![self containsSpecifier:[self specifierForID:@"GroupCell-3"]])
-
-			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell-3"], savedSpecifiers[@"PRYAnimateGradientSwitch"], savedSpecifiers[@"GroupCell-4"], savedSpecifiers[@"PRYGFirstColor"], savedSpecifiers[@"PRYGSecondColor"], savedSpecifiers[@"GroupCell-5"], savedSpecifiers[@"PRYGradientDirection"]] afterSpecifierID:@"PRYGradientSwitch" animated:YES];
-
-	}
-
-}
-
-
-#pragma mark AriaGaussianBlurCellDelegate
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
-	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
-	return cell;
-
-}
-
-
-- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImage]; }
-- (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton { presentAlertVCOn(self); }
-
-@end
-
-
-@interface AriaStockVC () <AriaGaussianBlurCellDelegate>
-@end
-
-
-@implementation AriaStockVC {
-
-	NSMutableDictionary *savedSpecifiers;
-
-}
-
-
-- (NSArray *)specifiers {
-
-	if(_specifiers) return nil;
-	_specifiers = [self loadSpecifiersFromPlistName:@"AriaStock" target:self];
-
-	NSArray *chosenIDs = @[
-		@"GroupCell1",
-		@"DarkImage",
-		@"LightImage",
-		@"GroupCell2",
-		@"BlurSlider",
-		@"GaussianGroupCell",
-		@"GaussianBlurButton",
-		@"GroupCell3",
-		@"AnimateGradientSwitch",
-		@"GroupCell4",
-		@"GFirstColor",
-		@"GSecondColor",
-		@"GroupCell5",
-		@"GradientDirections"
-	];
-
-	savedSpecifiers = savedSpecifiers ?: [NSMutableDictionary new];
-
-	for(PSSpecifier *specifier in _specifiers)
-
-		if([chosenIDs containsObject:[specifier propertyForKey:@"id"]])
-
-			[savedSpecifiers setObject:specifier forKey:[specifier propertyForKey:@"id"]];
-
-	return _specifiers;
-
-}
-
-
-- (id)init {
-
-	self = [super init];
-	if(self) [self setupNavBarButton];
-	return self;
-
-}
-
-
-- (void)viewDidLoad {
-
-	[super viewDidLoad];
-	[self reloadSpecifiers];
-
-}
-
-
-- (void)reloadSpecifiers { // Dynamic specifiers
-
-	[super reloadSpecifiers];
-
-	if(![[self readPreferenceValue:[self specifierForID:@"ImageSwitch"]] boolValue])
-
-		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] animated:NO];
-
-	else if(![self containsSpecifier:savedSpecifiers[@"GroupCell1"]])
-
-		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:NO];
-
-	if(![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue])
-
-		[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] animated:NO];
-
-	else if(![self containsSpecifier:savedSpecifiers[@"GroupCell3"]])
-
-		[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] afterSpecifierID:@"GradientSwitch" animated:NO];
-
-}
-
-
-- (void)setupNavBarButton {
-
-	UIImage *buttonImage = [UIImage systemImageNamed:@"infinity"];
-
-	UIButton *infoButton =  [UIButton new];
-	infoButton.tintColor = kAriaTintColor;
-	[infoButton setImage:buttonImage forState: UIControlStateNormal];
-	[infoButton addTarget:self action:@selector(didTapNavBarInfoButton) forControlEvents: UIControlEventTouchUpInside];
-
-	UIBarButtonItem *changelogButtonItem = [[UIBarButtonItem alloc] initWithCustomView: infoButton];
-	self.navigationItem.rightBarButtonItem = changelogButtonItem;
-
-}
-
-
-- (void)didTapNavBarInfoButton {
-
-	AudioServicesPlaySystemSound(1521);
-
-	UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Aria" message:@"The options you enable here won't inject unless you either disable Prysm (with iCleaner Pro) or you uninstall it." preferredStyle: UIAlertControllerStyleAlert];
-	UIAlertAction *dismissAction = [UIAlertAction actionWithTitle:@"Gotcha" style:UIAlertActionStyleCancel handler:nil];
-	[alertController addAction: dismissAction];
-
-	[self presentViewController:alertController animated:YES completion: nil];
-
-}
-
-
-- (id)readPreferenceValue:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
-	return (settings[specifier.properties[@"key"]]) ?: specifier.properties[@"default"];
-
-}
-
-
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
-
-	NSMutableDictionary *settings = [NSMutableDictionary dictionary];
-	[settings addEntriesFromDictionary:[NSDictionary dictionaryWithContentsOfFile: kPath]];
-	[settings setObject:value forKey:specifier.properties[@"key"]];	
-	[settings writeToFile:kPath atomically:YES];
-
-	[super setPreferenceValue:value specifier:specifier];
-
-	NSString *key = [specifier propertyForKey:@"key"];
-
-	if([key isEqualToString:@"giveMeTheImage"]) {
-
-		if(![value boolValue])
-
-			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] animated:YES];
-
-		else if(![self containsSpecifier:savedSpecifiers[@"GroupCell1"]])
-
-			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell1"], savedSpecifiers[@"DarkImage"], savedSpecifiers[@"LightImage"], savedSpecifiers[@"GroupCell2"], savedSpecifiers[@"BlurSlider"], savedSpecifiers[@"GaussianGroupCell"], savedSpecifiers[@"GaussianBlurButton"]] afterSpecifierID:@"ImageSwitch" animated:YES];
-
-	}
-
-	if([key isEqualToString:@"giveMeThoseGradients"]) {
-
-		if(![[self readPreferenceValue:[self specifierForID:@"GradientSwitch"]] boolValue])
-
-			[self removeContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] animated:YES];
-
-		else if (![self containsSpecifier:savedSpecifiers[@"GroupCell3"]])
-
-			[self insertContiguousSpecifiers:@[savedSpecifiers[@"GroupCell3"], savedSpecifiers[@"AnimateGradientSwitch"], savedSpecifiers[@"GroupCell4"], savedSpecifiers[@"GFirstColor"], savedSpecifiers[@"GSecondColor"], savedSpecifiers[@"GroupCell5"], savedSpecifiers[@"GradientDirections"]] afterSpecifierID:@"GradientSwitch" animated:YES];
-
-	}
-
-}
-
-
-#pragma mark AriaGaussianBlurCellDelegate
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
-	AriaGaussianBlurCell *cell = (AriaGaussianBlurCell *)[super tableView:tableView cellForRowAtIndexPath: indexPath];
-	if([cell isKindOfClass: AriaGaussianBlurCell.class]) cell.delegate = self;
-	return cell;
-
-}
-
-
-- (void)ariaGaussianBlurCellDidTapGaussianBlurButton { [[AriaImageManager sharedInstance] blurImage]; }
-- (void)ariaGaussianBlurCellDidTapGaussianBlurInfoButton { presentAlertVCOn(self); }
-
 
 @end
 
@@ -449,50 +130,12 @@ static void postNSNotification() {
 }
 
 
-- (void)launchDiscord {
+- (void)launchDiscord { [self launchURL: [NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"]]; }
+- (void)launchGitHub { [self launchURL: [NSURL URLWithString: @"https://github.com/Luki120/Aria"]]; }
+- (void)launchPayPal { [self launchURL: [NSURL URLWithString: @"https://paypal.me/Luki120"]]; }
+- (void)launchElixir { [self launchURL: [NSURL URLWithString:@"https://luki120.github.io/depictions/web/?p=me.luki.elixir"]]; }
+- (void)launchMarie { [self launchURL: [NSURL URLWithString: @"https://luki120.github.io/depictions/web/?p=me.luki.marie"]]; }
 
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://discord.gg/jbE3avwSHs"] options:@{} completionHandler:nil];
-
-}
-
-
-- (void)launchPayPal {
-
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://paypal.me/Luki120"] options:@{} completionHandler:nil];
-
-}
-
-
-- (void)launchGitHub {
-
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://github.com/Luki120/Aria"] options:@{} completionHandler:nil];
-
-}
-
-
-- (void)launchElixir {
-
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://luki120.github.io/depictions/web/?p=me.luki.elixir"] options:@{} completionHandler:nil];
-
-}
-
-
-- (void)launchMarie {
-
-	[UIApplication.sharedApplication openURL:[NSURL URLWithString: @"https://luki120.github.io/depictions/web/?p=me.luki.marie"] options:@{} completionHandler:nil];
-
-}
-
-@end
-
-
-@implementation AriaTintCell
-
-- (void)setTitle:(NSString *)t {
-
-	[super setTitle:t];
-	self.titleLabel.textColor = kAriaTintColor;
-
-}
+- (void)launchURL:(NSURL *)url { [UIApplication.sharedApplication openURL:url options:@{} completionHandler:nil]; }
 
 @end
