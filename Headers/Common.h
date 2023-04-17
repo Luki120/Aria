@@ -13,7 +13,7 @@ static NSNotificationName const AriaDidApplyPrysmImageNotification = @"AriaDidAp
 static NSNotificationName const AriaDidApplyPrysmGradientsNotification = @"AriaDidApplyPrysmGradientsNotification";
 
 #define kClass(class) NSClassFromString(class)
-#define kAriaTintColor [UIColor colorWithRed:0.47 green:0.04 blue:0.27 alpha: 1.0];
+#define kAriaTintColor [UIColor colorWithRed:0.47 green:0.04 blue:0.27 alpha: 1.0]
 #define kUserInterfaceStyle UIScreen.mainScreen.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark
 #define kPrysmExists [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Prysm.dylib"]
 
