@@ -1,7 +1,7 @@
 #import "AriaRootVC.h"
 
 
-static NSString *const kImagesPath = @"/var/mobile/Library/Preferences/me.luki.aprilprefs/";
+static NSString *const kImagesPath = rootlessPathNS(@"/var/mobile/Library/Preferences/me.luki.aprilprefs/");
 
 
 @implementation AriaRootVC {
@@ -53,7 +53,7 @@ static NSString *const kImagesPath = @"/var/mobile/Library/Preferences/me.luki.a
 
 	AudioServicesPlaySystemSound(1521);
 
-	UIImage *tweakImage = [UIImage imageWithContentsOfFile:@"/Library/PreferenceBundles/AriaPrefs.bundle/Assets/AriaIcon.png"];
+	UIImage *tweakImage = [UIImage imageWithContentsOfFile:rootlessPathNS(@"/Library/PreferenceBundles/AriaPrefs.bundle/Assets/AriaIcon.png")];
 	UIImage *checkmarkImage = [UIImage systemImageNamed:@"checkmark.circle.fill"];
 
 	if(changelogController) { [self presentViewController:changelogController animated:YES completion:nil]; return; }
@@ -123,7 +123,7 @@ static NSString *const kImagesPath = @"/var/mobile/Library/Preferences/me.luki.a
 
 	pid_t pid;
 	const char* args[] = {"killall", "backboardd", NULL};
-	posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
+	posix_spawn(&pid, rootlessPathC("/usr/bin/killall"), NULL, NULL, (char* const*)args, NULL);
 
 }
 
